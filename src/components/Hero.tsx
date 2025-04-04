@@ -23,14 +23,14 @@ const Hero = () => {
             </h1>
             
             <p className="text-lg md:text-xl text-gray-600 mb-8">
-              Build, manage, and scale IoT applications with our comprehensive platform. 
+              Build, manage, and scale IoT applications with zsee IoT platform. 
               Connect devices, visualize data, and automate workflows—all in one place.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4">
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button size="lg" className="px-8 py-6 text-base">
+                  <Button size="lg" className="px-8 py-6 text-base font-medium">
                     Get Started Free
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
@@ -40,7 +40,7 @@ const Hero = () => {
                 </DialogContent>
               </Dialog>
               
-              <Button size="lg" variant="outline" className="px-8 py-6 text-base">
+              <Button size="lg" variant="outline" className="px-8 py-6 text-base font-medium">
                 Schedule Demo
               </Button>
             </div>

@@ -19,13 +19,13 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed w-full bg-white/80 backdrop-blur-md z-50 py-4 shadow-sm">
+    <nav className="fixed w-full bg-white/90 backdrop-blur-md z-50 py-4 shadow-sm">
       <div className="container mx-auto flex justify-between items-center">
         <a href="#" className="flex items-center space-x-2">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-r from-iot-primary to-iot-accent flex items-center justify-center">
-            <span className="text-white font-bold text-sm">IoT</span>
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-iot-primary to-iot-accent flex items-center justify-center">
+            <span className="text-white font-bold text-sm">zsee</span>
           </div>
-          <span className="font-bold text-xl">IoT-Sphere</span>
+          <span className="font-bold text-xl">zsee IoT</span>
         </a>
 
         {/* Desktop Navigation */}
@@ -34,7 +34,7 @@ const Navbar = () => {
             <a 
               key={item.name} 
               href={item.href} 
-              className="text-gray-700 hover:text-iot-primary transition-colors"
+              className="text-gray-700 hover:text-iot-primary transition-colors font-medium"
             >
               {item.name}
             </a>
@@ -47,6 +47,7 @@ const Navbar = () => {
               <Button 
                 variant="ghost" 
                 onClick={() => setAuthMode("login")}
+                className="font-medium"
               >
                 Log in
               </Button>
@@ -60,6 +61,7 @@ const Navbar = () => {
             <DialogTrigger asChild>
               <Button 
                 onClick={() => setAuthMode("signup")}
+                className="font-medium"
               >
                 Sign up
               </Button>
@@ -84,7 +86,7 @@ const Navbar = () => {
               <a 
                 key={item.name} 
                 href={item.href} 
-                className="text-gray-800 text-lg py-2" 
+                className="text-gray-800 text-lg py-2 font-medium" 
                 onClick={toggleMenu}
               >
                 {item.name}

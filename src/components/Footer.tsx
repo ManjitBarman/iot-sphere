@@ -10,14 +10,14 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-16">
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-2 mb-6">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-iot-primary to-iot-accent flex items-center justify-center">
-                <span className="text-white font-bold text-sm">IoT</span>
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-iot-primary to-iot-accent flex items-center justify-center">
+                <span className="text-white font-bold text-sm">zsee</span>
               </div>
-              <span className="font-bold text-xl text-white">IoT-Sphere</span>
+              <span className="font-bold text-xl text-white">zsee IoT</span>
             </div>
 
             <p className="mb-6 text-sm text-gray-400 max-w-md">
-              IoT-Sphere is a comprehensive platform for building, deploying, and managing IoT applications at any scale. 
+              zsee IoT is a comprehensive platform for building, deploying, and managing IoT applications at any scale. 
               Connect devices, process data, and create powerful visualizations with ease.
             </p>
 
@@ -76,7 +76,7 @@ const Footer = () => {
         
         <div className="border-t border-gray-800 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm">&copy; {year} IoT-Sphere. All rights reserved.</p>
+            <p className="text-sm">&copy; {year} zsee IoT. All rights reserved.</p>
             <div className="flex space-x-6 mt-4 md:mt-0 text-sm">
               <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
               <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>

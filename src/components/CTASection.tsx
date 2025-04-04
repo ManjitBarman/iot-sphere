@@ -16,13 +16,13 @@ const CTASection = () => {
             Ready to Transform Your IoT Strategy?
           </h2>
           <p className="text-xl mb-8 opacity-90">
-            Join thousands of businesses already leveraging IoT-Sphere to build next-generation IoT applications.
+            Join thousands of businesses already leveraging zsee IoT to build next-generation IoT applications.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Dialog>
               <DialogTrigger asChild>
-                <Button size="lg" variant="secondary" className="px-8 py-6 text-base">
+                <Button size="lg" variant="secondary" className="px-8 py-6 text-base font-medium shadow-lg">
                   Start Building Free
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
@@ -32,7 +32,7 @@ const CTASection = () => {
               </DialogContent>
             </Dialog>
 
-            <Button size="lg" variant="outline" className="bg-transparent border-white hover:bg-white/10 text-white px-8 py-6 text-base">
+            <Button size="lg" variant="outline" className="bg-transparent border-white hover:bg-white/10 text-white px-8 py-6 text-base font-medium">
               Watch Demo
             </Button>
           </div>
