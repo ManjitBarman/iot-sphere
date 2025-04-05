@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
 import AuthModal from "./AuthModal";
 
 const Navbar = () => {
@@ -16,28 +17,39 @@ const Navbar = () => {
     { name: "How It Works", href: "#how-it-works" },
     { name: "Use Cases", href: "#use-cases" },
     { name: "Pricing", href: "#pricing" },
+    { name: "Email Demo", href: "/email-demo" },
   ];
 
   return (
     <nav className="fixed w-full bg-white/90 backdrop-blur-md z-50 py-4 shadow-sm">
       <div className="container mx-auto flex justify-between items-center">
-        <a href="#" className="flex items-center space-x-2">
+        <Link to="/" className="flex items-center space-x-2">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-iot-primary to-iot-accent flex items-center justify-center">
             <span className="text-white font-bold text-sm">zsee</span>
           </div>
           <span className="font-bold text-xl">zsee IoT</span>
-        </a>
+        </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-8">
           {navItems.map((item) => (
-            <a 
-              key={item.name} 
-              href={item.href} 
-              className="text-gray-700 hover:text-iot-primary transition-colors font-medium"
-            >
-              {item.name}
-            </a>
+            item.href.startsWith("/") ? (
+              <Link 
+                key={item.name} 
+                to={item.href} 
+                className="text-gray-700 hover:text-iot-primary transition-colors font-medium"
+              >
+                {item.name}
+              </Link>
+            ) : (
+              <a 
+                key={item.name} 
+                href={item.href} 
+                className="text-gray-700 hover:text-iot-primary transition-colors font-medium"
+              >
+                {item.name}
+              </a>
+            )
           ))}
         </div>
 
@@ -83,14 +95,25 @@ const Navbar = () => {
         <div className="md:hidden fixed inset-0 top-16 bg-white z-40 p-5">
           <div className="flex flex-col space-y-4">
             {navItems.map((item) => (
-              <a 
-                key={item.name} 
-                href={item.href} 
-                className="text-gray-800 text-lg py-2 font-medium" 
-                onClick={toggleMenu}
-              >
-                {item.name}
-              </a>
+              item.href.startsWith("/") ? (
+                <Link 
+                  key={item.name} 
+                  to={item.href} 
+                  className="text-gray-800 text-lg py-2 font-medium" 
+                  onClick={toggleMenu}
+                >
+                  {item.name}
+                </Link>
+              ) : (
+                <a 
+                  key={item.name} 
+                  href={item.href} 
+                  className="text-gray-800 text-lg py-2 font-medium" 
+                  onClick={toggleMenu}
+                >
+                  {item.name}
+                </a>
+              )
             ))}
             <div className="pt-4 border-t border-gray-200">
               <Dialog>
