@@ -18,6 +18,7 @@ const Navbar = () => {
     { name: "Use Cases", href: "#use-cases" },
     { name: "Pricing", href: "#pricing" },
     { name: "Email Demo", href: "/email-demo" },
+    { name: "Dashboard", href: "/dashboard" },
   ];
 
   return (
