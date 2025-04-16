@@ -3,13 +3,13 @@ import { useState } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import DashboardContent from "@/components/dashboard/DashboardContent";
+import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import { useTheme } from "@/hooks/useTheme";
-import { Button } from "@/components/ui/button";
-import { Moon, Sun } from "lucide-react";
 
 const Dashboard = () => {
-  const { theme, setTheme } = useTheme();
+  const { theme } = useTheme();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [editMode, setEditMode] = useState(false);
 
   return (
     <div className="min-h-screen bg-background">
@@ -17,20 +17,8 @@ const Dashboard = () => {
         <div className="min-h-screen flex w-full">
           <DashboardSidebar />
           <div className="flex-1 flex flex-col">
-            <div className="h-16 border-b flex items-center justify-between px-4">
-              <h1 className="text-xl font-semibold">zsee IoT Dashboard</h1>
-              <div className="flex items-center gap-4">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                >
-                  {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
-                </Button>
-                <Button variant="outline">Edit</Button>
-              </div>
-            </div>
-            <DashboardContent />
+            <DashboardHeader editMode={editMode} setEditMode={setEditMode} />
+            <DashboardContent editMode={editMode} />
           </div>
         </div>
       </SidebarProvider>

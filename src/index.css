@@ -112,3 +112,54 @@
 .animate-pulse-slow {
   animation: pulse-slow 8s infinite;
 }
+
+/* Dashboard specific styles */
+.widget-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.widget-card {
+  @apply bg-card border rounded-lg shadow-sm overflow-hidden transition-all duration-200;
+}
+
+.widget-card:hover {
+  @apply shadow-md;
+}
+
+.widget-card.dragging {
+  @apply opacity-70 border-dashed border-2 border-primary;
+}
+
+.edit-mode .widget-card {
+  @apply cursor-move border-dashed border-2;
+}
+
+/* IoT specific elements */
+.data-pulse {
+  @apply relative;
+}
+
+.data-pulse::after {
+  content: '';
+  @apply absolute top-0 right-0 w-2 h-2 bg-green-500 rounded-full;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(0, 208, 56, 0.7);
+  }
+  
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(0, 208, 56, 0);
+  }
+  
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(0, 208, 56, 0);
+  }
+}
