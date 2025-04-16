@@ -1,14 +1,11 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
-import AuthModal from "./AuthModal";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [authMode, setAuthMode] = useState<"login" | "signup">("login");
   
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -55,34 +52,22 @@ const Navbar = () => {
         </div>
 
         <div className="hidden md:flex items-center space-x-4">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button 
-                variant="ghost" 
-                onClick={() => setAuthMode("login")}
-                className="font-medium"
-              >
-                Log in
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
-              <AuthModal mode={authMode} setMode={setAuthMode} />
-            </DialogContent>
-          </Dialog>
+          <Link to="/login">
+            <Button 
+              variant="ghost" 
+              className="font-medium"
+            >
+              Log in
+            </Button>
+          </Link>
 
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button 
-                onClick={() => setAuthMode("signup")}
-                className="font-medium"
-              >
-                Sign up
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
-              <AuthModal mode={authMode} setMode={setAuthMode} />
-            </DialogContent>
-          </Dialog>
+          <Link to="/login">
+            <Button 
+              className="font-medium"
+            >
+              Sign up
+            </Button>
+          </Link>
         </div>
 
         {/* Mobile Navigation */}
@@ -117,40 +102,24 @@ const Navbar = () => {
               )
             ))}
             <div className="pt-4 border-t border-gray-200">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button 
-                    variant="outline" 
-                    className="w-full mb-3" 
-                    onClick={() => {
-                      setAuthMode("login");
-                      toggleMenu();
-                    }}
-                  >
-                    Log in
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-md">
-                  <AuthModal mode={authMode} setMode={setAuthMode} />
-                </DialogContent>
-              </Dialog>
+              <Link to="/login">
+                <Button 
+                  variant="outline" 
+                  className="w-full mb-3"
+                  onClick={toggleMenu}
+                >
+                  Log in
+                </Button>
+              </Link>
 
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button 
-                    className="w-full"
-                    onClick={() => {
-                      setAuthMode("signup");
-                      toggleMenu();
-                    }}
-                  >
-                    Sign up
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-md">
-                  <AuthModal mode={authMode} setMode={setAuthMode} />
-                </DialogContent>
-              </Dialog>
+              <Link to="/login">
+                <Button 
+                  className="w-full"
+                  onClick={toggleMenu}
+                >
+                  Sign up
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
