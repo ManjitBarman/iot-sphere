@@ -97,3 +97,18 @@
   z-index: -1;
   opacity: 0.5;
 }
+
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+    background-position: 0% 50%;
+  }
+  50% {
+    opacity: 0.8;
+    background-position: 100% 50%;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 8s infinite;
+}
