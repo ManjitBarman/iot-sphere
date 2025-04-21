@@ -13,18 +13,24 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { 
+  Home,
   LayoutDashboard, 
   Cpu, 
-  Database, 
+  MessageSquare, 
   BarChart3, 
   Settings, 
-  HelpCircle, 
-  Home, 
+  HelpCircle,
   LogOut 
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const DashboardSidebar = () => {
+  const location = useLocation();
+  
+  const isActive = (path: string) => {
+    return location.pathname === path || location.pathname.startsWith(`${path}/`);
+  };
+
   return (
     <Sidebar>
       <SidebarHeader className="flex items-center justify-between px-4 py-2">
@@ -42,7 +48,15 @@ const DashboardSidebar = () => {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Dashboard">
+                <SidebarMenuButton asChild tooltip="Home" isActive={isActive("/dashboard/home")}>
+                  <Link to="/dashboard/home">
+                    <Home className="h-5 w-5" />
+                    <span>Home</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip="Dashboard" isActive={isActive("/dashboard") && !isActive("/dashboard/home") && !isActive("/dashboard/devices") && !isActive("/dashboard/topics")}>
                   <Link to="/dashboard">
                     <LayoutDashboard className="h-5 w-5" />
                     <span>Dashboard</span>
@@ -50,7 +64,7 @@ const DashboardSidebar = () => {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Devices">
+                <SidebarMenuButton asChild tooltip="Devices" isActive={isActive("/dashboard/devices")}>
                   <Link to="/dashboard/devices">
                     <Cpu className="h-5 w-5" />
                     <span>Devices</span>
@@ -58,15 +72,15 @@ const DashboardSidebar = () => {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Data">
-                  <Link to="/dashboard/data">
-                    <Database className="h-5 w-5" />
-                    <span>Data</span>
+                <SidebarMenuButton asChild tooltip="MQTT Topics" isActive={isActive("/dashboard/topics")}>
+                  <Link to="/dashboard/topics">
+                    <MessageSquare className="h-5 w-5" />
+                    <span>MQTT Topics</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Analytics">
+                <SidebarMenuButton asChild tooltip="Analytics" isActive={isActive("/dashboard/analytics")}>
                   <Link to="/dashboard/analytics">
                     <BarChart3 className="h-5 w-5" />
                     <span>Analytics</span>
@@ -81,7 +95,7 @@ const DashboardSidebar = () => {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Settings">
+                <SidebarMenuButton asChild tooltip="Settings" isActive={isActive("/dashboard/settings")}>
                   <Link to="/dashboard/settings">
                     <Settings className="h-5 w-5" />
                     <span>Settings</span>
@@ -89,7 +103,7 @@ const DashboardSidebar = () => {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Help">
+                <SidebarMenuButton asChild tooltip="Help" isActive={isActive("/dashboard/help")}>
                   <Link to="/dashboard/help">
                     <HelpCircle className="h-5 w-5" />
                     <span>Help</span>

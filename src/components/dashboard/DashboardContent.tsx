@@ -6,6 +6,10 @@ import { DeviceStatusWidget } from "@/components/dashboard/widgets/DeviceStatusW
 import { JsonViewerWidget } from "@/components/dashboard/widgets/JsonViewerWidget";
 import { WidgetCard } from "@/components/dashboard/widgets/WidgetCard";
 import { WidgetGrid } from "@/components/dashboard/widgets/WidgetGrid";
+import { WidgetSelector } from "@/components/dashboard/widgets/WidgetSelector";
+import { Button } from "@/components/ui/button";
+import { Plus, Save } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const defaultDeviceData = {
   deviceId: 1024,
@@ -52,30 +56,105 @@ interface DashboardContentProps {
   editMode: boolean;
 }
 
+// Mock devices for the demo
+const availableDevices = [
+  { id: "dev-1", name: "Temperature Sensor" },
+  { id: "dev-2", name: "Humidity Control" },
+  { id: "dev-3", name: "Smart Light" },
+];
+
 const DashboardContent = ({ editMode }: DashboardContentProps) => {
   const [deviceData] = useState(defaultDeviceData);
+  const [widgets, setWidgets] = useState([
+    {
+      id: "widget-1",
+      title: "Device Status",
+      type: "status",
+      size: "md",
+      device: "dev-1",
+    },
+    {
+      id: "widget-2",
+      title: "Temperature Data",
+      type: "chart",
+      size: "md",
+      device: "dev-1",
+    },
+    {
+      id: "widget-3",
+      title: "Current Reading",
+      type: "value",
+      size: "sm",
+      device: "dev-2",
+    },
+    {
+      id: "widget-4",
+      title: "Humidity Level",
+      type: "value",
+      size: "sm",
+      device: "dev-2",
+    },
+    {
+      id: "widget-5",
+      title: "JSON Data",
+      type: "json",
+      size: "lg",
+      device: "dev-3",
+    },
+  ]);
+  const [showWidgetSelector, setShowWidgetSelector] = useState(false);
+  const [selectedDevice, setSelectedDevice] = useState<string | null>(null);
+  const { toast } = useToast();
 
-  return (
-    <div className="flex-1 p-4 lg:p-6 overflow-auto bg-muted/20">
-      <WidgetGrid editMode={editMode}>
-        <WidgetCard 
-          title="Device Status" 
-          size="md"
-          className={`${editMode ? 'cursor-move border-dashed border-2' : ''}`}
-        >
+  const handleAddWidget = (widgetType: string, size: "sm" | "md" | "lg") => {
+    if (!selectedDevice) {
+      toast({
+        title: "Device Required",
+        description: "Please select a device for this widget",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const newWidget = {
+      id: `widget-${Date.now()}`,
+      title: `New ${widgetType} Widget`,
+      type: widgetType,
+      size,
+      device: selectedDevice,
+    };
+
+    setWidgets([...widgets, newWidget]);
+    setShowWidgetSelector(false);
+    setSelectedDevice(null);
+
+    toast({
+      title: "Widget Added",
+      description: "New widget has been added to your dashboard",
+    });
+  };
+
+  const handleSaveDashboard = () => {
+    // In a real app, you would save the dashboard configuration to your backend
+    toast({
+      title: "Dashboard Saved",
+      description: "Your dashboard changes have been saved",
+    });
+  };
+
+  const renderWidget = (widget: any) => {
+    switch (widget.type) {
+      case "status":
+        return (
           <DeviceStatusWidget 
             deviceId={deviceData.deviceId}
             batteryLevel={deviceData.payload.battery_level}
             gridStatus={deviceData.payload.grid_status}
             pumpStatus={deviceData.submersible_pump.status}
           />
-        </WidgetCard>
-        
-        <WidgetCard 
-          title="Temperature Data" 
-          size="md"
-          className={`${editMode ? 'cursor-move border-dashed border-2' : ''}`}
-        >
+        );
+      case "chart":
+        return (
           <ChartWidget 
             data={[
               { name: "12:00", value: deviceData.temperature.value },
@@ -88,42 +167,81 @@ const DashboardContent = ({ editMode }: DashboardContentProps) => {
             yAxisKey="value"
             color="#0070f3"
           />
-        </WidgetCard>
-        
-        <WidgetCard 
-          title="Current Reading" 
-          size="sm"
-          className={`${editMode ? 'cursor-move border-dashed border-2' : ''}`}
-        >
+        );
+      case "value":
+        return (
           <ValueWidget 
-            value={1}
-            label="Current"
+            value={widget.title.includes("Humidity") ? deviceData.humidity.level : 1}
+            label={widget.title.includes("Humidity") ? "Level" : "Current"}
             large
-            color="#0070f3"
+            color={widget.title.includes("Humidity") ? "#00d5bd" : "#0070f3"}
           />
-        </WidgetCard>
-        
-        <WidgetCard 
-          title="Humidity Level" 
-          size="sm"
-          className={`${editMode ? 'cursor-move border-dashed border-2' : ''}`}
-        >
-          <ValueWidget 
-            value={deviceData.humidity.level}
-            label="Level"
-            large
-            color="#00d5bd"
-          />
-        </WidgetCard>
-        
-        <WidgetCard 
-          title="JSON Data" 
-          size="lg"
-          className={`${editMode ? 'cursor-move border-dashed border-2' : ''}`}
-        >
-          <JsonViewerWidget data={deviceData} />
-        </WidgetCard>
+        );
+      case "json":
+        return <JsonViewerWidget data={deviceData} />;
+      default:
+        return <div>Unknown widget type</div>;
+    }
+  };
+
+  return (
+    <div className="flex-1 p-4 lg:p-6 overflow-auto bg-muted/20">
+      {editMode && (
+        <div className="mb-4 p-4 bg-muted/30 rounded-lg border border-dashed flex items-center justify-between">
+          <div>
+            <h3 className="font-semibold">Dashboard Edit Mode</h3>
+            <p className="text-sm text-muted-foreground">
+              Add and arrange widgets to customize your dashboard
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setShowWidgetSelector(true)}
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              Add Widget
+            </Button>
+            <Button onClick={handleSaveDashboard}>
+              <Save className="mr-2 h-4 w-4" />
+              Save Changes
+            </Button>
+          </div>
+        </div>
+      )}
+
+      <WidgetGrid editMode={editMode}>
+        {widgets.map((widget) => (
+          <WidgetCard 
+            key={widget.id}
+            title={widget.title} 
+            size={widget.size as "sm" | "md" | "lg" | "xl"}
+            className={`${editMode ? 'cursor-move border-dashed border-2' : ''}`}
+            device={availableDevices.find(d => d.id === widget.device)?.name}
+            editMode={editMode}
+            onDelete={() => {
+              setWidgets(widgets.filter(w => w.id !== widget.id));
+              toast({
+                title: "Widget Removed",
+                description: "Widget has been removed from your dashboard",
+              });
+            }}
+          >
+            {renderWidget(widget)}
+          </WidgetCard>
+        ))}
       </WidgetGrid>
+
+      {showWidgetSelector && (
+        <WidgetSelector 
+          isOpen={showWidgetSelector}
+          onClose={() => setShowWidgetSelector(false)}
+          onSelectWidget={handleAddWidget}
+          devices={availableDevices}
+          selectedDevice={selectedDevice}
+          onSelectDevice={setSelectedDevice}
+        />
+      )}
     </div>
   );
 };
