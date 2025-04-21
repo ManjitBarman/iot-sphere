@@ -1,4 +1,3 @@
-
 import {
   Sidebar,
   SidebarContent,
@@ -26,7 +25,7 @@ import { Link, useLocation } from "react-router-dom";
 
 const DashboardSidebar = () => {
   const location = useLocation();
-  
+
   const isActive = (path: string) => {
     return location.pathname === path || location.pathname.startsWith(`${path}/`);
   };
@@ -56,34 +55,18 @@ const DashboardSidebar = () => {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Dashboard" isActive={isActive("/dashboard") && !isActive("/dashboard/home") && !isActive("/dashboard/devices") && !isActive("/dashboard/topics")}>
-                  <Link to="/dashboard">
+                <SidebarMenuButton asChild tooltip="Dashboards" isActive={isActive("/dashboards")}>
+                  <Link to="/dashboards">
                     <LayoutDashboard className="h-5 w-5" />
-                    <span>Dashboard</span>
+                    <span>Dashboards</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Devices" isActive={isActive("/dashboard/devices")}>
-                  <Link to="/dashboard/devices">
+                <SidebarMenuButton asChild tooltip="Devices" isActive={isActive("/devices")}>
+                  <Link to="/devices">
                     <Cpu className="h-5 w-5" />
                     <span>Devices</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="MQTT Topics" isActive={isActive("/dashboard/topics")}>
-                  <Link to="/dashboard/topics">
-                    <MessageSquare className="h-5 w-5" />
-                    <span>MQTT Topics</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Analytics" isActive={isActive("/dashboard/analytics")}>
-                  <Link to="/dashboard/analytics">
-                    <BarChart3 className="h-5 w-5" />
-                    <span>Analytics</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
