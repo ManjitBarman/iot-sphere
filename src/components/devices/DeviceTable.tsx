@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2, MoreVertical, Wifi, WifiOff } from "lucide-react";
+import { Edit, Trash2, MoreVertical, Wifi, WifiOff, SquareMenu } from "lucide-react";
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -19,6 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useNavigate } from "react-router-dom";
 
 // Mock data - in a real app this would come from your API
 const mockDevices = [
@@ -50,9 +51,10 @@ const mockDevices = [
 
 export function DeviceTable() {
   const [devices] = useState(mockDevices);
+  const navigate = useNavigate();
 
   return (
-    <div className="rounded-md border">
+    <div className="rounded-md border overflow-x-auto">
       <Table>
         <TableHeader>
           <TableRow>
@@ -61,19 +63,20 @@ export function DeviceTable() {
             <TableHead>Type</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Last Seen</TableHead>
+            <TableHead>Topics</TableHead>
             <TableHead className="w-[80px]">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {devices.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={6} className="text-center h-24">
+              <TableCell colSpan={7} className="text-center h-24">
                 No devices found.
               </TableCell>
             </TableRow>
           ) : (
             devices.map((device) => (
-              <TableRow key={device.id}>
+              <TableRow key={device.id} className="cursor-pointer hover:bg-accent/40" onClick={() => navigate(`/devices/${device.deviceId}`)}>
                 <TableCell className="font-medium">{device.name}</TableCell>
                 <TableCell>{device.deviceId}</TableCell>
                 <TableCell>
@@ -96,6 +99,20 @@ export function DeviceTable() {
                 </TableCell>
                 <TableCell>
                   {new Date(device.lastSeen).toLocaleString()}
+                </TableCell>
+                <TableCell>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-1"
+                    onClick={e => {
+                      e.stopPropagation();
+                      navigate(`/devices/${device.deviceId}#topics`);
+                    }}
+                  >
+                    <SquareMenu className="h-4 w-4" />
+                    Manage Topics
+                  </Button>
                 </TableCell>
                 <TableCell>
                   <DropdownMenu>
@@ -124,6 +141,9 @@ export function DeviceTable() {
           )}
         </TableBody>
       </Table>
+      <div className="text-xs text-muted-foreground mt-2 ml-2">
+        <SquareMenu className="inline h-3 w-3" /> <span>Click "Manage Topics" to view/manage topics inside device.</span>
+      </div>
     </div>
   );
 }

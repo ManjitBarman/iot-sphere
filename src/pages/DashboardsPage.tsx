@@ -51,10 +51,16 @@ export default function DashboardsPage() {
                 <div className="flex justify-between items-center mb-6">
                   <div>
                     <h1 className="text-3xl font-bold flex items-center gap-2">
-                      <LayoutDashboard className="w-7 h-7" /> 
+                      <span>
+                        <span className="inline-block mr-2 bg-primary text-primary-foreground rounded-full w-7 h-7 flex items-center justify-center">
+                          <span className="font-extrabold text-xl">D</span>
+                        </span>
+                      </span>
                       Dashboards
                     </h1>
-                    <p className="text-muted-foreground">Create your own dashboards. Select a device and add widgets in edit mode.</p>
+                    <p className="text-muted-foreground">
+                      Create your own dashboards linked to devices. Add widgets to display real-time data with drag-&-drop edit mode.
+                    </p>
                   </div>
                   <Button onClick={() => setShowAddDashboard(true)}>
                     <Plus className="mr-2 h-4 w-4" /> Add Dashboard
@@ -63,16 +69,19 @@ export default function DashboardsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                   {dashboards.length === 0 ? (
                     <Card>
-                      <CardContent className="p-4 text-center">No dashboards yet. Click "Add Dashboard" to create one.</CardContent>
+                      <CardContent className="p-4 text-center">
+                        No dashboards yet. Click <span className="font-semibold">Add Dashboard</span> to create one.<br />
+                        <span className="text-muted-foreground text-xs">Each dashboard must be linked to a device.</span>
+                      </CardContent>
                     </Card>
                   ) : dashboards.map(dash => (
-                    <Card key={dash.id}>
+                    <Card key={dash.id} className="hover:scale-[1.015] transition-transform duration-150 shadow hover:shadow-lg">
                       <CardHeader>
                         <CardTitle>{dash.name}</CardTitle>
                       </CardHeader>
                       <CardContent>
                         <div>
-                          <strong>Device ID:</strong> {dash.deviceId}
+                          <strong>Device:</strong> <span className="text-primary">{mockDevices.find(d=>d.id===dash.deviceId)?.name || dash.deviceId}</span>
                         </div>
                       </CardContent>
                       <CardFooter>
@@ -87,7 +96,7 @@ export default function DashboardsPage() {
               {showAddDashboard && (
                 <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 animate-fade-in">
                   <div className="bg-card rounded-lg p-6 shadow-xl min-w-[350px] relative">
-                    <button aria-label="Close" className="absolute right-2 top-2" onClick={() => setShowAddDashboard(false)}>
+                    <button aria-label="Close" className="absolute right-2 top-2 text-lg" onClick={() => setShowAddDashboard(false)}>
                       ×
                     </button>
                     <h3 className="text-lg font-semibold mb-4">Add Dashboard</h3>
@@ -115,6 +124,7 @@ export default function DashboardsPage() {
                             <option key={dev.id} value={dev.id}>{dev.name}</option>
                           ))}
                         </select>
+                        <span className="text-xs text-muted-foreground">Device required for dashboard widgets.</span>
                       </div>
                       <div className="flex justify-end gap-2">
                         <Button variant="outline" type="button" onClick={() => setShowAddDashboard(false)}>Cancel</Button>
@@ -131,4 +141,3 @@ export default function DashboardsPage() {
     </div>
   );
 }
-
