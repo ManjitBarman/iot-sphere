@@ -7,6 +7,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Plus } from "lucide-react";
+import { TopicForm } from "@/components/topics/TopicForm";
 
 // Mock device and topics (replace with API calls in production)
 const mockDevices = [
@@ -97,8 +98,10 @@ export default function DeviceDetailsPage() {
                 </Card>
                 <Card>
                   <CardHeader className="flex-row items-center justify-between">
-                    <CardTitle>MQTT Topics</CardTitle>
-                    <Button onClick={() => setShowAddTopic(true)} size="sm" className="ml-auto"><Plus className="mr-2 h-4 w-4" /> Add Topic</Button>
+                    <CardTitle>Topics</CardTitle>
+                    <Button onClick={() => setShowAddTopic(true)} size="sm" className="ml-auto">
+                      <Plus className="mr-2 h-4 w-4" /> Add Topic
+                    </Button>
                   </CardHeader>
                   <CardContent>
                     {deviceTopics.length === 0 ? (
@@ -127,6 +130,17 @@ export default function DeviceDetailsPage() {
                     )}
                   </CardContent>
                 </Card>
+                {showAddTopic && (
+                  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 animate-fade-in">
+                    <div className="bg-card rounded-lg p-6 shadow-xl min-w-[350px] relative">
+                      <button aria-label="Close" className="absolute right-2 top-2" onClick={() => setShowAddTopic(false)}>
+                        ×
+                      </button>
+                      <h3 className="text-lg font-semibold mb-2">Add Topic</h3>
+                      <TopicForm onSubmit={() => setShowAddTopic(false)} />
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
