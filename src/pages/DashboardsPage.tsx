@@ -1,12 +1,12 @@
-
 import { useState } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus, Edit, LayoutDashboard } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 // Basic mock dashboards
 const initialDashboards = [
@@ -51,48 +51,65 @@ export default function DashboardsPage() {
                 <div className="flex justify-between items-center mb-6">
                   <div>
                     <h1 className="text-3xl font-bold flex items-center gap-2">
-                      <span>
-                        <span className="inline-block mr-2 bg-primary text-primary-foreground rounded-full w-7 h-7 flex items-center justify-center">
-                          <span className="font-extrabold text-xl">D</span>
-                        </span>
+                      <span className="inline-block mr-2 bg-primary text-primary-foreground rounded-full w-10 h-10 flex items-center justify-center">
+                        <LayoutDashboard className="h-6 w-6" />
                       </span>
                       Dashboards
                     </h1>
-                    <p className="text-muted-foreground">
-                      Create your own dashboards linked to devices. Add widgets to display real-time data with drag-&-drop edit mode.
+                    <p className="text-muted-foreground mt-1">
+                      Create and manage your device dashboards
                     </p>
                   </div>
                   <Button onClick={() => setShowAddDashboard(true)}>
                     <Plus className="mr-2 h-4 w-4" /> Add Dashboard
                   </Button>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {dashboards.length === 0 ? (
-                    <Card>
-                      <CardContent className="p-4 text-center">
-                        No dashboards yet. Click <span className="font-semibold">Add Dashboard</span> to create one.<br />
-                        <span className="text-muted-foreground text-xs">Each dashboard must be linked to a device.</span>
-                      </CardContent>
-                    </Card>
-                  ) : dashboards.map(dash => (
-                    <Card key={dash.id} className="hover:scale-[1.015] transition-transform duration-150 shadow hover:shadow-lg">
-                      <CardHeader>
-                        <CardTitle>{dash.name}</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div>
-                          <strong>Device:</strong> <span className="text-primary">{mockDevices.find(d=>d.id===dash.deviceId)?.name || dash.deviceId}</span>
-                        </div>
-                      </CardContent>
-                      <CardFooter>
-                        <Button variant="outline" className="w-full" onClick={() => navigate(`/dashboard/${dash.id}`)}>
-                          <Edit className="mr-2 h-4 w-4" /> Edit Dashboard
-                        </Button>
-                      </CardFooter>
-                    </Card>
-                  ))}
+
+                <div className="bg-card rounded-lg border shadow-sm">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Dashboard Name</TableHead>
+                        <TableHead>Device</TableHead>
+                        <TableHead>Last Modified</TableHead>
+                        <TableHead className="w-[100px]">Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {dashboards.length === 0 ? (
+                        <TableRow>
+                          <TableCell colSpan={4} className="text-center h-24 text-muted-foreground">
+                            No dashboards yet. Click "Add Dashboard" to create one.
+                          </TableCell>
+                        </TableRow>
+                      ) : (
+                        dashboards.map((dash) => (
+                          <TableRow key={dash.id} className="group">
+                            <TableCell className="font-medium">{dash.name}</TableCell>
+                            <TableCell>
+                              {mockDevices.find((d) => d.id === dash.deviceId)?.name || dash.deviceId}
+                            </TableCell>
+                            <TableCell>Just now</TableCell>
+                            <TableCell>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => navigate(`/dashboard/${dash.id}`)}
+                                className="opacity-0 group-hover:opacity-100 transition-opacity"
+                              >
+                                <Edit className="h-4 w-4 mr-2" />
+                                Edit
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      )}
+                    </TableBody>
+                  </Table>
                 </div>
               </div>
+
+              {/* Keep the add dashboard modal */}
               {showAddDashboard && (
                 <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 animate-fade-in">
                   <div className="bg-card rounded-lg p-6 shadow-xl min-w-[350px] relative">
