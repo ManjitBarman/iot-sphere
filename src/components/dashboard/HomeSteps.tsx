@@ -1,7 +1,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, "mqtt-topics", "view-dashboards" } from "lucide-react";
+import { Plus, Database, LayoutDashboard } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function HomeSteps() {
@@ -33,7 +33,7 @@ export default function HomeSteps() {
           <div className="text-muted-foreground text-sm mb-2">Set up data channels</div>
           <div className="text-sm mb-6">Define MQTT topics for your devices to publish and subscribe to data.</div>
           <Button className="w-full" variant="secondary" onClick={() => navigate("/devices")}>
-            <mqtt-topics className="mr-2" /> Configure Topics
+            <Database className="mr-2" /> Configure Topics
           </Button>
         </CardContent>
       </Card>
@@ -47,7 +47,7 @@ export default function HomeSteps() {
           <div className="text-muted-foreground text-sm mb-2">Visualize your data</div>
           <div className="text-sm mb-6">Build custom dashboards with widgets to monitor your devices in real-time.</div>
           <Button className="w-full" variant="secondary" onClick={() => navigate("/dashboards")}>
-            <view-dashboards className="mr-2" /> Create Dashboards
+            <LayoutDashboard className="mr-2" /> Create Dashboards
           </Button>
         </CardContent>
       </Card>

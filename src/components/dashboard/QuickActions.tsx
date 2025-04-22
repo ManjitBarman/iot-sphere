@@ -1,7 +1,7 @@
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { "devices", "mqtt-topics", "view-dashboards" } from "lucide-react";
+import { Devices, LayoutDashboard, Database } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function QuickActions() {
@@ -17,21 +17,21 @@ export default function QuickActions() {
             className="w-full flex justify-start items-center gap-2"
             onClick={() => navigate("/devices")}
           >
-            <devices className="mr-2" /> Manage Devices
+            <Devices className="mr-2" /> Manage Devices
           </Button>
           <Button
             variant="outline"
             className="w-full flex justify-start items-center gap-2"
             onClick={() => navigate("/devices")}
           >
-            <mqtt-topics className="mr-2" /> Manage MQTT Topics
+            <Database className="mr-2" /> Manage MQTT Topics
           </Button>
           <Button
             variant="outline"
             className="w-full flex justify-start items-center gap-2"
             onClick={() => navigate("/dashboards")}
           >
-            <view-dashboards className="mr-2" /> View Dashboards
+            <LayoutDashboard className="mr-2" /> View Dashboards
           </Button>
         </div>
       </div>
