@@ -1,3 +1,4 @@
+
 import {
   Sidebar,
   SidebarContent,
@@ -19,7 +20,9 @@ import {
   BarChart3, 
   Settings, 
   HelpCircle,
-  LogOut 
+  LogOut,
+  FileChart,
+  Calendar
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -67,6 +70,37 @@ const DashboardSidebar = () => {
                   <Link to="/devices">
                     <Cpu className="h-5 w-5" />
                     <span>Devices</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip="Analytics" isActive={isActive("/analytics")}>
+                  <Link to="/analytics">
+                    <BarChart3 className="h-5 w-5" />
+                    <span>Analytics</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Analytics Tools</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip="Historical Data" isActive={isActive("/analytics/historical")}>
+                  <Link to="/analytics/historical">
+                    <Calendar className="h-5 w-5" />
+                    <span>Historical Data</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip="Reports" isActive={isActive("/analytics/reports")}>
+                  <Link to="/analytics/reports">
+                    <FileChart className="h-5 w-5" />
+                    <span>Reports</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -13,6 +14,7 @@ import NotFound from "./pages/NotFound";
 import EmailServiceDemo from "./components/EmailServiceDemo";
 import DeviceDetailsPage from "./pages/DeviceDetailsPage";
 import DashboardsPage from "./pages/DashboardsPage";
+import AnalyticsPage from "./pages/AnalyticsPage";
 
 const queryClient = new QueryClient();
 
@@ -29,8 +31,12 @@ const App = () => (
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/dashboard/home" element={<DashboardHome />} />
             <Route path="/dashboards" element={<DashboardsPage />} />
+            <Route path="/dashboard/:dashboardId" element={<Dashboard />} />
             <Route path="/devices" element={<DevicesPage />} />
             <Route path="/devices/:deviceId" element={<DeviceDetailsPage />} />
+            <Route path="/analytics" element={<AnalyticsPage />} />
+            <Route path="/analytics/historical" element={<AnalyticsPage />} />
+            <Route path="/analytics/reports" element={<AnalyticsPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
