@@ -1,7 +1,7 @@
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Devices, LayoutDashboard, Database } from "lucide-react";
+import { Cpu, LayoutDashboard, Database } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function QuickActions() {
@@ -17,7 +17,7 @@ export default function QuickActions() {
             className="w-full flex justify-start items-center gap-2"
             onClick={() => navigate("/devices")}
           >
-            <Devices className="mr-2" /> Manage Devices
+            <Cpu className="mr-2" /> Manage Devices
           </Button>
           <Button
             variant="outline"

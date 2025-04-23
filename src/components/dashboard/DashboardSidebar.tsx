@@ -21,8 +21,9 @@ import {
   Settings, 
   HelpCircle,
   LogOut,
-  FileChart,
-  Calendar
+  FileText, 
+  Calendar,
+  CalendarDays
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -99,7 +100,7 @@ const DashboardSidebar = () => {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip="Reports" isActive={isActive("/analytics/reports")}>
                   <Link to="/analytics/reports">
-                    <FileChart className="h-5 w-5" />
+                    <FileText className="h-5 w-5" />
                     <span>Reports</span>
                   </Link>
                 </SidebarMenuButton>

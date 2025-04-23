@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
@@ -12,7 +11,7 @@ import {
   PieChart, 
   BarChart, 
   FileSpreadsheet, 
-  FilePdf, 
+  File, 
   Send,
   Plus
 } from "lucide-react";
@@ -240,7 +239,7 @@ export default function ReportsPage() {
                             <div className="flex items-center justify-between">
                               <CardTitle className="flex items-center">
                                 {report.format === 'pdf' ? (
-                                  <FilePdf className="h-5 w-5 mr-2 text-primary" />
+                                  <File className="h-5 w-5 mr-2 text-primary" />
                                 ) : (
                                   <FileSpreadsheet className="h-5 w-5 mr-2 text-primary" />
                                 )}

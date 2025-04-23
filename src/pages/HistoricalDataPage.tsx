@@ -8,8 +8,8 @@ import { Button } from "@/components/ui/button";
 import { 
   Calendar, 
   Download, 
-  ChartLine, 
-  FileChart, 
+  LineChart, 
+  FileText, 
   CalendarDays, 
   ArrowRight 
 } from "lucide-react";
@@ -65,7 +65,7 @@ export default function HistoricalDataPage() {
                 <div className="flex justify-between items-center mb-6">
                   <div>
                     <h1 className="text-3xl font-bold flex items-center gap-2">
-                      <FileChart className="h-6 w-6 text-primary" />
+                      <FileText className="h-6 w-6 text-primary" />
                       Historical Data
                     </h1>
                     <p className="text-muted-foreground mt-1">
@@ -166,7 +166,7 @@ export default function HistoricalDataPage() {
                         </TabsTrigger>
                         <TabsTrigger value="chart">
                           <span className="flex items-center">
-                            <ChartLine className="h-4 w-4 mr-2" />
+                            <LineChart className="h-4 w-4 mr-2" />
                             Chart View
                           </span>
                         </TabsTrigger>
