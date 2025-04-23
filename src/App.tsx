@@ -15,6 +15,8 @@ import EmailServiceDemo from "./components/EmailServiceDemo";
 import DeviceDetailsPage from "./pages/DeviceDetailsPage";
 import DashboardsPage from "./pages/DashboardsPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
+import HistoricalDataPage from "./pages/HistoricalDataPage";
+import ReportsPage from "./pages/ReportsPage";
 
 const queryClient = new QueryClient();
 
@@ -35,8 +37,8 @@ const App = () => (
             <Route path="/devices" element={<DevicesPage />} />
             <Route path="/devices/:deviceId" element={<DeviceDetailsPage />} />
             <Route path="/analytics" element={<AnalyticsPage />} />
-            <Route path="/analytics/historical" element={<AnalyticsPage />} />
-            <Route path="/analytics/reports" element={<AnalyticsPage />} />
+            <Route path="/analytics/historical" element={<HistoricalDataPage />} />
+            <Route path="/analytics/reports" element={<ReportsPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

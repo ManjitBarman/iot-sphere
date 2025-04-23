@@ -54,6 +54,7 @@ const defaultDeviceData = {
 
 interface DashboardContentProps {
   editMode: boolean;
+  autoFormat: boolean;
 }
 
 // Mock devices for the demo
@@ -63,7 +64,7 @@ const availableDevices = [
   { id: "dev-3", name: "Smart Light" },
 ];
 
-const DashboardContent = ({ editMode }: DashboardContentProps) => {
+const DashboardContent = ({ editMode, autoFormat }: DashboardContentProps) => {
   const [deviceData] = useState(defaultDeviceData);
   const [widgets, setWidgets] = useState([
     {
@@ -210,7 +211,7 @@ const DashboardContent = ({ editMode }: DashboardContentProps) => {
         </div>
       )}
 
-      <WidgetGrid editMode={editMode}>
+      <WidgetGrid editMode={editMode} autoFormat={autoFormat}>
         {widgets.map((widget) => (
           <WidgetCard 
             key={widget.id}
