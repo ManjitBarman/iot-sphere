@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
@@ -13,7 +14,10 @@ import {
   FileSpreadsheet, 
   File, 
   Send,
-  Plus
+  Plus,
+  Settings,
+  RefreshCw,
+  Users
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { 
@@ -29,6 +33,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { UserPermissionsDialog } from "@/components/dashboard/UserPermissionsDialog";
 
 const reportTemplates = [
   {
@@ -77,6 +82,7 @@ export default function ReportsPage() {
   const [reportName, setReportName] = useState("");
   const [selectedTemplate, setSelectedTemplate] = useState("");
   const [reportFormat, setReportFormat] = useState("pdf");
+  const [showUserPermissions, setShowUserPermissions] = useState(false);
   const { toast } = useToast();
 
   const handleCreateReport = () => {
@@ -137,66 +143,181 @@ export default function ReportsPage() {
                       Generate and manage device data reports
                     </p>
                   </div>
-                  <Dialog open={showNewReport} onOpenChange={setShowNewReport}>
-                    <DialogTrigger asChild>
-                      <Button>
-                        <Plus className="mr-2 h-4 w-4" /> Create New Report
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Create New Report</DialogTitle>
-                        <DialogDescription>
-                          Generate a new report based on your device data
-                        </DialogDescription>
-                      </DialogHeader>
-                      <div className="space-y-4 py-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="report-name">Report Name</Label>
-                          <Input 
-                            id="report-name" 
-                            value={reportName}
-                            onChange={(e) => setReportName(e.target.value)}
-                            placeholder="Enter report name"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="report-template">Report Template</Label>
-                          <Select value={selectedTemplate} onValueChange={setSelectedTemplate}>
-                            <SelectTrigger id="report-template">
-                              <SelectValue placeholder="Select a report template" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {reportTemplates.map(template => (
-                                <SelectItem key={template.id} value={template.id}>
-                                  {template.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="report-format">Report Format</Label>
-                          <Select value={reportFormat} onValueChange={setReportFormat}>
-                            <SelectTrigger id="report-format">
-                              <SelectValue placeholder="Select format" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="pdf">PDF Document</SelectItem>
-                              <SelectItem value="excel">Excel Spreadsheet</SelectItem>
-                              <SelectItem value="csv">CSV File</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                      <DialogFooter>
-                        <Button variant="outline" onClick={() => setShowNewReport(false)}>
-                          Cancel
+                  
+                  <div className="flex gap-2">
+                    <Button variant="outline" onClick={() => setShowUserPermissions(true)}>
+                      <Users className="mr-2 h-4 w-4" /> Manage Viewers
+                    </Button>
+                    <Dialog open={showNewReport} onOpenChange={setShowNewReport}>
+                      <DialogTrigger asChild>
+                        <Button>
+                          <Plus className="mr-2 h-4 w-4" /> Create New Report
                         </Button>
-                        <Button onClick={handleCreateReport}>Generate Report</Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Create New Report</DialogTitle>
+                          <DialogDescription>
+                            Generate a new report based on your device data
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="space-y-4 py-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="report-name">Report Name</Label>
+                            <Input 
+                              id="report-name" 
+                              value={reportName}
+                              onChange={(e) => setReportName(e.target.value)}
+                              placeholder="Enter report name"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="report-template">Report Template</Label>
+                            <Select value={selectedTemplate} onValueChange={setSelectedTemplate}>
+                              <SelectTrigger id="report-template">
+                                <SelectValue placeholder="Select a report template" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {reportTemplates.map(template => (
+                                  <SelectItem key={template.id} value={template.id}>
+                                    {template.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="report-format">Report Format</Label>
+                            <Select value={reportFormat} onValueChange={setReportFormat}>
+                              <SelectTrigger id="report-format">
+                                <SelectValue placeholder="Select format" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="pdf">PDF Document</SelectItem>
+                                <SelectItem value="excel">Excel Spreadsheet</SelectItem>
+                                <SelectItem value="csv">CSV File</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="report-date-range">Date Range</Label>
+                            <Select defaultValue="last30days">
+                              <SelectTrigger id="report-date-range">
+                                <SelectValue placeholder="Select date range" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="today">Today</SelectItem>
+                                <SelectItem value="last7days">Last 7 Days</SelectItem>
+                                <SelectItem value="last30days">Last 30 Days</SelectItem>
+                                <SelectItem value="custom">Custom Range</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="report-devices">Devices</Label>
+                            <Select defaultValue="all">
+                              <SelectTrigger id="report-devices">
+                                <SelectValue placeholder="Select devices" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="all">All Devices</SelectItem>
+                                <SelectItem value="temperature">Temperature Sensors</SelectItem>
+                                <SelectItem value="humidity">Humidity Sensors</SelectItem>
+                                <SelectItem value="lights">Smart Lights</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+                        <DialogFooter>
+                          <Button variant="outline" onClick={() => setShowNewReport(false)}>
+                            Cancel
+                          </Button>
+                          <Button onClick={handleCreateReport}>Generate Report</Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                  <Card>
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <CardTitle>Recent Reports</CardTitle>
+                        <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
+                          {savedReports.length} Reports
+                        </span>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="space-y-2">
+                        {savedReports.map((report) => (
+                          <li key={report.id} className="flex justify-between items-center border-b pb-2">
+                            <div>
+                              <p className="font-medium">{report.name}</p>
+                              <p className="text-xs text-muted-foreground">{report.createdAt}</p>
+                            </div>
+                            <Button variant="ghost" size="sm">
+                              <Download className="h-4 w-4" />
+                            </Button>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Scheduled Reports</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        {savedReports
+                          .filter(r => r.scheduled)
+                          .map(report => (
+                          <div key={report.id} className="flex justify-between items-center border-b pb-2">
+                            <div>
+                              <p className="font-medium">{report.name}</p>
+                              <div className="flex items-center text-xs text-muted-foreground">
+                                <Calendar className="h-3 w-3 mr-1" />
+                                Weekly
+                              </div>
+                            </div>
+                            <Button variant="ghost" size="sm">
+                              <Settings className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        ))}
+                        {savedReports.filter(r => r.scheduled).length === 0 && (
+                          <div className="text-center py-4 text-muted-foreground">
+                            <p>No scheduled reports</p>
+                            <Button variant="ghost" size="sm" className="mt-2">
+                              <Plus className="h-4 w-4 mr-1" /> Schedule a report
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Quick Actions</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-2">
+                        <Button className="w-full justify-start" variant="outline" onClick={() => setShowNewReport(true)}>
+                          <Plus className="h-4 w-4 mr-2" /> Create New Report
+                        </Button>
+                        <Button className="w-full justify-start" variant="outline">
+                          <RefreshCw className="h-4 w-4 mr-2" /> Refresh All Data
+                        </Button>
+                        <Button className="w-full justify-start" variant="outline">
+                          <Settings className="h-4 w-4 mr-2" /> Report Settings
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
 
                 <Tabs defaultValue="templates">
@@ -327,6 +448,8 @@ export default function ReportsPage() {
           </div>
         </div>
       </SidebarProvider>
+      
+      <UserPermissionsDialog open={showUserPermissions} onOpenChange={setShowUserPermissions} />
     </div>
   );
 }

@@ -5,16 +5,23 @@ import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import DashboardContent from "@/components/dashboard/DashboardContent";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import { Button } from "@/components/ui/button";
-import { Plus, Save, LayoutGrid, Settings } from "lucide-react";
+import { Plus, Save, LayoutGrid, Settings, Info, Users } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { WidgetSelector } from "@/components/dashboard/widgets/WidgetSelector";
+import { UserPermissionsDialog } from "@/components/dashboard/UserPermissionsDialog";
+import { UserGuideDialog } from "@/components/dashboard/UserGuideDialog";
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [autoFormat, setAutoFormat] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
+  const [showWidgetSelector, setShowWidgetSelector] = useState(false);
+  const [showUserPermissions, setShowUserPermissions] = useState(false);
+  const [showUserGuide, setShowUserGuide] = useState(false);
+  const [selectedDevice, setSelectedDevice] = useState<string | null>(null);
   const { toast } = useToast();
 
   const handleSaveDashboard = () => {
@@ -25,13 +32,18 @@ const Dashboard = () => {
     setEditMode(false);
   };
 
+  // Check if this is the user's first visit to show the guide
   useEffect(() => {
-    // Apply auto-format settings to the layout
-    if (autoFormat) {
-      // This would apply auto-formatting logic in a real implementation
-      console.log("Auto-formatting layout applied");
+    const hasSeenGuide = localStorage.getItem("hasSeenDashboardGuide");
+    if (!hasSeenGuide) {
+      setShowUserGuide(true);
     }
-  }, [autoFormat]);
+  }, []);
+
+  const handleCloseGuide = () => {
+    localStorage.setItem("hasSeenDashboardGuide", "true");
+    setShowUserGuide(false);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -54,27 +66,40 @@ const Dashboard = () => {
                 </Button>
               </div>
               
-              {editMode && (
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      id="auto-format"
-                      checked={autoFormat}
-                      onCheckedChange={setAutoFormat}
-                    />
-                    <Label htmlFor="auto-format" className="cursor-pointer">Auto-Format Layout</Label>
-                  </div>
-                  <Button variant="outline" onClick={() => setShowSettings(!showSettings)}>
-                    <Settings className="mr-2 h-4 w-4" /> Dashboard Settings
-                  </Button>
-                  <Button variant="outline">
-                    <Plus className="mr-2 h-4 w-4" /> Add Widget
-                  </Button>
-                  <Button onClick={handleSaveDashboard}>
-                    <Save className="mr-2 h-4 w-4" /> Save Changes
-                  </Button>
-                </div>
-              )}
+              <div className="flex items-center gap-4">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setShowUserGuide(true)}
+                >
+                  <Info className="mr-2 h-4 w-4" /> User Guide
+                </Button>
+                
+                {editMode && (
+                  <>
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="auto-format"
+                        checked={autoFormat}
+                        onCheckedChange={setAutoFormat}
+                      />
+                      <Label htmlFor="auto-format" className="cursor-pointer">Auto-Format Layout</Label>
+                    </div>
+                    <Button variant="outline" onClick={() => setShowUserPermissions(true)}>
+                      <Users className="mr-2 h-4 w-4" /> Manage Access
+                    </Button>
+                    <Button variant="outline" onClick={() => setShowSettings(!showSettings)}>
+                      <Settings className="mr-2 h-4 w-4" /> Dashboard Settings
+                    </Button>
+                    <Button variant="outline" onClick={() => setShowWidgetSelector(true)}>
+                      <Plus className="mr-2 h-4 w-4" /> Add Widget
+                    </Button>
+                    <Button onClick={handleSaveDashboard}>
+                      <Save className="mr-2 h-4 w-4" /> Save Changes
+                    </Button>
+                  </>
+                )}
+              </div>
             </div>
             
             {showSettings && editMode && (
@@ -121,10 +146,42 @@ const Dashboard = () => {
               </div>
             )}
             
-            <DashboardContent editMode={editMode} autoFormat={autoFormat} />
+            <DashboardContent 
+              editMode={editMode} 
+              autoFormat={autoFormat} 
+            />
           </div>
         </div>
       </SidebarProvider>
+      
+      <WidgetSelector 
+        isOpen={showWidgetSelector}
+        onClose={() => setShowWidgetSelector(false)}
+        onSelectWidget={(type, size) => {
+          toast({
+            title: "Widget Added",
+            description: `New ${type} widget has been added to your dashboard`,
+          });
+          setShowWidgetSelector(false);
+        }}
+        devices={[
+          { id: "dev-1", name: "Temperature Sensor" },
+          { id: "dev-2", name: "Humidity Control" },
+          { id: "dev-3", name: "Smart Light" },
+        ]}
+        selectedDevice={selectedDevice}
+        onSelectDevice={setSelectedDevice}
+      />
+      
+      <UserPermissionsDialog 
+        open={showUserPermissions}
+        onOpenChange={setShowUserPermissions}
+      />
+      
+      <UserGuideDialog 
+        open={showUserGuide}
+        onOpenChange={handleCloseGuide}
+      />
     </div>
   );
 };
