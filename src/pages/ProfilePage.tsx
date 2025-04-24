@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Upload, Camera } from "lucide-react";
+import { Upload, Camera, User, Mail, Phone, Building2, MapPin } from "lucide-react";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -19,7 +18,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 export default function ProfilePage() {
   const { toast } = useToast();
   const [isUpdating, setIsUpdating] = useState(false);
-  const [editMode, setEditMode] = useState(false); // Add state for editMode
+  const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
     name: "John Doe",
     email: "john@example.com",
@@ -81,7 +80,7 @@ export default function ProfilePage() {
               <CardHeader>
                 <CardTitle>Profile Settings</CardTitle>
                 <CardDescription>
-                  Manage your profile information and security settings
+                  {editMode ? "Update your profile information" : "Your profile information"}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -94,136 +93,201 @@ export default function ProfilePage() {
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <label
-                      htmlFor="profile-picture"
-                      className="absolute bottom-0 right-0 p-1 bg-primary text-white rounded-full cursor-pointer hover:bg-primary/90 transition-colors"
-                    >
-                      <Camera className="h-4 w-4" />
-                      <input
-                        type="file"
-                        id="profile-picture"
-                        className="hidden"
-                        accept="image/*"
-                        onChange={handleProfilePictureUpload}
-                      />
-                    </label>
+                    {editMode && (
+                      <label
+                        htmlFor="profile-picture"
+                        className="absolute bottom-0 right-0 p-1 bg-primary text-white rounded-full cursor-pointer hover:bg-primary/90 transition-colors"
+                      >
+                        <Camera className="h-4 w-4" />
+                        <input
+                          type="file"
+                          id="profile-picture"
+                          className="hidden"
+                          accept="image/*"
+                          onChange={handleProfilePictureUpload}
+                        />
+                      </label>
+                    )}
                   </div>
                 </div>
 
-                <form onSubmit={handleUpdateProfile} className="space-y-6">
-                  <div className="grid gap-6 md:grid-cols-2">
-                    <div className="space-y-2">
-                      <Label htmlFor="name">Full Name</Label>
-                      <Input
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                      />
+                {editMode ? (
+                  <form onSubmit={handleUpdateProfile} className="space-y-6">
+                    <div className="grid gap-6 md:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="name">Full Name</Label>
+                        <Input
+                          id="name"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input
+                          id="email"
+                          name="email"
+                          value={formData.email}
+                          readOnly
+                          disabled
+                          className="bg-muted"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="phone">Phone Number</Label>
+                        <Input
+                          id="phone"
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="organization">Organization</Label>
+                        <Input
+                          id="organization"
+                          name="organization"
+                          value={formData.organization}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="streetAddress">Street Address</Label>
+                        <Input
+                          id="streetAddress"
+                          name="streetAddress"
+                          value={formData.streetAddress}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="city">City</Label>
+                        <Input
+                          id="city"
+                          name="city"
+                          value={formData.city}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="state">State</Label>
+                        <Input
+                          id="state"
+                          name="state"
+                          value={formData.state}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="country">Country</Label>
+                        <Input
+                          id="country"
+                          name="country"
+                          value={formData.country}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="pincode">Pincode</Label>
+                        <Input
+                          id="pincode"
+                          name="pincode"
+                          value={formData.pincode}
+                          onChange={handleInputChange}
+                        />
+                      </div>
                     </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        readOnly
-                        disabled
-                        className="bg-muted"
-                      />
+                    <div className="flex flex-col sm:flex-row justify-between gap-4">
+                      <Button 
+                        type="submit" 
+                        disabled={isUpdating}
+                        className="flex-1 sm:flex-none"
+                      >
+                        {isUpdating ? "Updating..." : "Save Changes"}
+                      </Button>
+                      
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={handleRequestPasswordChange}
+                        className="flex-1 sm:flex-none"
+                      >
+                        Request Password Change
+                      </Button>
+
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        onClick={() => setEditMode(false)}
+                        className="flex-1 sm:flex-none"
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </form>
+                ) : (
+                  <div className="space-y-6">
+                    <div className="grid gap-6 md:grid-cols-2">
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 text-muted-foreground">
+                          <User className="h-4 w-4" />
+                          <span className="text-sm font-medium">Full Name</span>
+                        </div>
+                        <p className="text-lg">{formData.name}</p>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 text-muted-foreground">
+                          <Mail className="h-4 w-4" />
+                          <span className="text-sm font-medium">Email</span>
+                        </div>
+                        <p className="text-lg">{formData.email}</p>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 text-muted-foreground">
+                          <Phone className="h-4 w-4" />
+                          <span className="text-sm font-medium">Phone Number</span>
+                        </div>
+                        <p className="text-lg">{formData.phone}</p>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 text-muted-foreground">
+                          <Building2 className="h-4 w-4" />
+                          <span className="text-sm font-medium">Organization</span>
+                        </div>
+                        <p className="text-lg">{formData.organization}</p>
+                      </div>
+
+                      <div className="space-y-2 md:col-span-2">
+                        <div className="flex items-center gap-2 text-muted-foreground">
+                          <MapPin className="h-4 w-4" />
+                          <span className="text-sm font-medium">Address</span>
+                        </div>
+                        <p className="text-lg">
+                          {formData.streetAddress}, {formData.city}, {formData.state}, {formData.country} - {formData.pincode}
+                        </p>
+                      </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">Phone Number</Label>
-                      <Input
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="organization">Organization</Label>
-                      <Input
-                        id="organization"
-                        name="organization"
-                        value={formData.organization}
-                        onChange={handleInputChange}
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="streetAddress">Street Address</Label>
-                      <Input
-                        id="streetAddress"
-                        name="streetAddress"
-                        value={formData.streetAddress}
-                        onChange={handleInputChange}
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="city">City</Label>
-                      <Input
-                        id="city"
-                        name="city"
-                        value={formData.city}
-                        onChange={handleInputChange}
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="state">State</Label>
-                      <Input
-                        id="state"
-                        name="state"
-                        value={formData.state}
-                        onChange={handleInputChange}
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="country">Country</Label>
-                      <Input
-                        id="country"
-                        name="country"
-                        value={formData.country}
-                        onChange={handleInputChange}
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="pincode">Pincode</Label>
-                      <Input
-                        id="pincode"
-                        name="pincode"
-                        value={formData.pincode}
-                        onChange={handleInputChange}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row justify-between gap-4">
                     <Button 
-                      type="submit" 
-                      disabled={isUpdating}
-                      className="flex-1 sm:flex-none"
+                      onClick={() => setEditMode(true)}
+                      className="mt-6"
                     >
-                      {isUpdating ? "Updating..." : "Update Profile"}
-                    </Button>
-                    
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={handleRequestPasswordChange}
-                      className="flex-1 sm:flex-none"
-                    >
-                      Request Password Change
+                      Update Profile
                     </Button>
                   </div>
-                </form>
+                )}
               </CardContent>
             </Card>
           </div>
