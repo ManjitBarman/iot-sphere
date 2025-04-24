@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Upload, Camera, User, Mail, Phone, Building2, MapPin } from "lucide-react";
+import { Upload, Camera, User, Mail, Phone, Building2, MapPin, Key, Download } from "lucide-react";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -67,6 +67,34 @@ export default function ProfilePage() {
         description: "Your profile picture has been successfully updated.",
       });
     }
+  };
+
+  const handleDownloadCredentials = () => {
+    const mqttCredentials = {
+      brokerUrl: "mqtt://broker.example.com:1883",
+      username: "device_123",
+      password: "secure_password_456",
+      clientId: "iot_client_789"
+    };
+
+    const content = `MQTT Credentials:
+Broker URL: ${mqttCredentials.brokerUrl}
+Username: ${mqttCredentials.username}
+Password: ${mqttCredentials.password}
+Client ID: ${mqttCredentials.clientId}`;
+
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'mqtt-credentials.txt';
+    a.click();
+    window.URL.revokeObjectURL(url);
+
+    toast({
+      title: "Credentials Downloaded",
+      description: "Your MQTT credentials have been downloaded successfully.",
+    });
   };
 
   return (
@@ -290,9 +318,70 @@ export default function ProfilePage() {
                 )}
               </CardContent>
             </Card>
+
+            <Card className="mt-6">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Key className="h-5 w-5" />
+                  MQTT Credentials
+                </CardTitle>
+                <CardDescription>
+                  Your MQTT connection details for device communication
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="grid gap-4">
+                    <div className="space-y-2">
+                      <Label>Broker URL</Label>
+                      <Input 
+                        value="mqtt://broker.example.com:1883"
+                        readOnly
+                        className="bg-muted font-mono text-sm"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Username</Label>
+                      <Input 
+                        value="device_123"
+                        readOnly
+                        className="bg-muted font-mono text-sm"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Client ID</Label>
+                      <Input 
+                        value="iot_client_789"
+                        readOnly
+                        className="bg-muted font-mono text-sm"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Password</Label>
+                      <Input 
+                        type="password"
+                        value="secure_password_456"
+                        readOnly
+                        className="bg-muted font-mono text-sm"
+                      />
+                    </div>
+                  </div>
+                  <Button 
+                    onClick={handleDownloadCredentials}
+                    className="w-full sm:w-auto"
+                    variant="outline"
+                  >
+                    <Download className="mr-2 h-4 w-4" />
+                    Download Credentials
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
     </SidebarProvider>
   );
 }
+
+export default ProfilePage;
