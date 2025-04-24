@@ -1,8 +1,7 @@
-
 import { Moon, Sun, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/useTheme";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import ProfileMenu from "@/components/ProfileMenu";
 import { 
   Breadcrumb,
   BreadcrumbItem,
@@ -58,10 +57,7 @@ const DashboardHeader = ({ editMode, setEditMode }: DashboardHeaderProps) => {
           >
             {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
           </Button>
-          <Avatar className="h-8 w-8">
-            <AvatarImage src="/placeholder.svg" />
-            <AvatarFallback>ZS</AvatarFallback>
-          </Avatar>
+          <ProfileMenu />
         </div>
       </div>
     </div>
