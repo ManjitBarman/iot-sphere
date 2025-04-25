@@ -383,5 +383,3 @@ Client ID: ${mqttCredentials.clientId}`;
     </SidebarProvider>
   );
 }
-
-export default ProfilePage;
