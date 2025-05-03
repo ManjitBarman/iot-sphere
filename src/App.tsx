@@ -21,6 +21,7 @@ import ProfilePage from "./pages/ProfilePage";
 import AdminPanel from "./pages/AdminPanel";
 import ThemeDocumentation from "./docs/ThemeDocumentation";
 import ComponentColorGuide from "./docs/ComponentColorGuide";
+import ChakraThemeGuide from "./docs/ChakraThemeGuide";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ const App = () => (
             <Route path="/admin" element={<AdminPanel />} />
             <Route path="/theme-docs" element={<ThemeDocumentation />} />
             <Route path="/color-guide" element={<ComponentColorGuide />} />
+            <Route path="/chakra-theme" element={<ChakraThemeGuide />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

@@ -18,6 +18,7 @@ const Navbar = () => {
     { name: "Admin", href: "/admin" },
     { name: "Theme Docs", href: "/theme-docs" },
     { name: "Color Guide", href: "/color-guide" },
+    { name: "Chakra Theme", href: "/chakra-theme" },
   ];
 
   return (
