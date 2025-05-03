@@ -20,6 +20,7 @@ import ReportsPage from "./pages/ReportsPage";
 import ProfilePage from "./pages/ProfilePage";
 import AdminPanel from "./pages/AdminPanel";
 import ThemeDocumentation from "./docs/ThemeDocumentation";
+import ComponentColorGuide from "./docs/ComponentColorGuide";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +46,7 @@ const App = () => (
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/admin" element={<AdminPanel />} />
             <Route path="/theme-docs" element={<ThemeDocumentation />} />
+            <Route path="/color-guide" element={<ComponentColorGuide />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
