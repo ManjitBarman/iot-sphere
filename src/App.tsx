@@ -19,6 +19,7 @@ import HistoricalDataPage from "./pages/HistoricalDataPage";
 import ReportsPage from "./pages/ReportsPage";
 import ProfilePage from "./pages/ProfilePage";
 import AdminPanel from "./pages/AdminPanel";
+import ThemeDocumentation from "./docs/ThemeDocumentation";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ const App = () => (
             <Route path="/analytics/reports" element={<ReportsPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/admin" element={<AdminPanel />} />
+            <Route path="/theme-docs" element={<ThemeDocumentation />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
