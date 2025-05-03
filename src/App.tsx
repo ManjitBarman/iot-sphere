@@ -22,6 +22,7 @@ import AdminPanel from "./pages/AdminPanel";
 import ThemeDocumentation from "./docs/ThemeDocumentation";
 import ComponentColorGuide from "./docs/ComponentColorGuide";
 import ChakraThemeGuide from "./docs/ChakraThemeGuide";
+import ChakraThemeExport from "./pages/ChakraThemeExport";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +50,7 @@ const App = () => (
             <Route path="/theme-docs" element={<ThemeDocumentation />} />
             <Route path="/color-guide" element={<ComponentColorGuide />} />
             <Route path="/chakra-theme" element={<ChakraThemeGuide />} />
+            <Route path="/chakra-theme-export" element={<ChakraThemeExport />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

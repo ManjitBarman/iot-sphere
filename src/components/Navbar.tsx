@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
@@ -19,6 +20,7 @@ const Navbar = () => {
     { name: "Theme Docs", href: "/theme-docs" },
     { name: "Color Guide", href: "/color-guide" },
     { name: "Chakra Theme", href: "/chakra-theme" },
+    { name: "Theme Export", href: "/chakra-theme-export" },
   ];
 
   return (
