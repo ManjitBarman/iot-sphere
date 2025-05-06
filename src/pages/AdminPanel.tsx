@@ -28,6 +28,12 @@ import { AdminSettingsForm } from "@/components/admin/AdminSettingsForm";
 
 export default function AdminPanel() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [activeTab, setActiveTab] = useState("overview");
+
+  // Function to change tab
+  const handleViewAllAlerts = () => {
+    setActiveTab("alerts");
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -54,7 +60,7 @@ export default function AdminPanel() {
                   </div>
                 </div>
 
-                <Tabs defaultValue="overview" className="space-y-4">
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
                   <TabsList className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-2">
                     <TabsTrigger value="overview" className="flex items-center gap-2">
                       <BarChart3 className="h-4 w-4" />
@@ -109,8 +115,8 @@ export default function AdminPanel() {
                           <AdminAlertsPanel limit={5} />
                         </CardContent>
                         <CardFooter>
-                          <Button variant="outline" className="w-full" asChild>
-                            <TabsTrigger value="alerts">View All Alerts</TabsTrigger>
+                          <Button variant="outline" className="w-full" onClick={handleViewAllAlerts}>
+                            View All Alerts
                           </Button>
                         </CardFooter>
                       </Card>
