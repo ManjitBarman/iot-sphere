@@ -3,20 +3,27 @@ import { useState } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { 
   Calendar, 
   Download, 
   LineChart, 
   FileText, 
-  CalendarDays, 
-  ArrowRight,
   Filter,
   Search,
   SlidersHorizontal,
   X,
-  ChevronDown
+  ChevronDown,
+  BarChart,
+  BarChart3,
+  Share2,
+  Printer,
+  Clock,
+  CalendarDays,
+  SaveAll,
+  TrashIcon,
+  PanelRightClose
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
@@ -33,6 +40,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import { useNavigate } from "react-router-dom";
 
 const mockDevices = [
@@ -72,6 +81,8 @@ export default function HistoricalDataPage() {
   const [valueMin, setValueMin] = useState("");
   const [valueMax, setValueMax] = useState("");
   const [timeRange, setTimeRange] = useState({ start: "", end: "" });
+  const [activeView, setActiveView] = useState("table");
+  const [currentTab, setCurrentTab] = useState("data");
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -160,6 +171,13 @@ export default function HistoricalDataPage() {
     });
   };
 
+  const handleSaveView = () => {
+    toast({
+      title: "View Saved",
+      description: "Current view configuration has been saved",
+    });
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <SidebarProvider defaultOpen={sidebarOpen} open={sidebarOpen} onOpenChange={setSidebarOpen}>
@@ -169,318 +187,474 @@ export default function HistoricalDataPage() {
             <DashboardHeader editMode={false} setEditMode={() => {}} />
             <div className="flex-1 p-6 overflow-auto bg-muted/20">
               <div className="max-w-6xl mx-auto">
-                <div className="flex justify-between items-center mb-6">
-                  <div>
-                    <h1 className="text-3xl font-bold flex items-center gap-2">
-                      <FileText className="h-6 w-6 text-primary" />
-                      Historical Data
-                    </h1>
-                    <p className="text-muted-foreground mt-1">
-                      View and analyze historical device data over time
-                    </p>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Button variant="outline" onClick={() => navigate("/analytics/reports")}>
-                      <ArrowRight className="mr-2 h-4 w-4" /> View Reports
-                    </Button>
-                    <Button onClick={handleExportData}>
-                      <Download className="mr-2 h-4 w-4" /> Export Data
-                    </Button>
+                <div className="mb-6">
+                  <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+                    <div>
+                      <h1 className="text-3xl font-bold flex items-center gap-2">
+                        <div className="w-10 h-10 rounded-md bg-primary/10 flex items-center justify-center">
+                          <Clock className="h-5 w-5 text-primary" />
+                        </div>
+                        Historical Data
+                      </h1>
+                      <p className="text-muted-foreground mt-1">
+                        View and analyze historical device data over time
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <Button variant="outline" size="sm" onClick={handleSaveView}>
+                        <SaveAll className="mr-2 h-4 w-4" />
+                        Save View
+                      </Button>
+                      <Button variant="outline" size="sm" onClick={() => navigate("/analytics/reports")}>
+                        <FileText className="mr-2 h-4 w-4" />
+                        Reports
+                      </Button>
+                      <Button size="sm" onClick={handleExportData}>
+                        <Download className="mr-2 h-4 w-4" />
+                        Export
+                      </Button>
+                    </div>
                   </div>
                 </div>
 
-                <Card className="mb-6">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-lg flex items-center justify-between">
-                      <span>Data Filters</span>
-                      <Button variant="ghost" size="sm" onClick={clearFilters} className="h-8">
-                        <X className="h-4 w-4 mr-2" /> Clear Filters
-                      </Button>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="device-filter">Device</Label>
-                        <Select 
-                          value={selectedDevice || ""} 
-                          onValueChange={handleDeviceChange}
-                        >
-                          <SelectTrigger id="device-filter">
-                            <SelectValue placeholder="All devices" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="">All devices</SelectItem>
-                            {mockDevices.map(device => (
-                              <SelectItem key={device.id} value={device.id}>
-                                {device.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                <Tabs value={currentTab} onValueChange={setCurrentTab} className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <TabsList>
+                      <TabsTrigger value="data" className="data-tab">
+                        <FileText className="mr-2 h-4 w-4" />
+                        Data
+                      </TabsTrigger>
+                      <TabsTrigger value="visualization">
+                        <BarChart className="mr-2 h-4 w-4" />
+                        Visualization
+                      </TabsTrigger>
+                      <TabsTrigger value="analytics">
+                        <LineChart className="mr-2 h-4 w-4" />
+                        Analytics
+                      </TabsTrigger>
+                    </TabsList>
+                    <div className="flex gap-2">
+                      <Select value={selectedDateRange} onValueChange={setSelectedDateRange}>
+                        <SelectTrigger className="w-[180px]">
+                          <CalendarDays className="mr-2 h-4 w-4" />
+                          <SelectValue placeholder="Date range" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="today">Today</SelectItem>
+                          <SelectItem value="yesterday">Yesterday</SelectItem>
+                          <SelectItem value="last7days">Last 7 Days</SelectItem>
+                          <SelectItem value="last30days">Last 30 Days</SelectItem>
+                          <SelectItem value="custom">Custom Range</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <div className="relative">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Input 
+                          placeholder="Search..."
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)} 
+                          className="w-[200px] pl-9"
+                        />
+                        {searchQuery && (
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0" 
+                            onClick={() => setSearchQuery("")}
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
+                        )}
                       </div>
-                      
-                      <div className="space-y-2">
-                        <Label>Topics</Label>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <Button variant="outline" className="w-full justify-between">
-                              <span className="truncate">
-                                {selectedTopics.length === 0 
-                                  ? "All topics" 
-                                  : `${selectedTopics.length} selected`}
-                              </span>
-                              <ChevronDown className="h-4 w-4 ml-2 opacity-50" />
-                            </Button>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-80 p-0" align="start">
-                            <div className="p-2 border-b">
-                              <div className="text-sm font-medium">Select Topics</div>
-                              <div className="text-xs text-muted-foreground">
-                                {availableTopics.length} topics available
+                    </div>
+                  </div>
+
+                  <TabsContent value="data" className="space-y-4">
+                    <Card>
+                      <CardContent className="p-6">
+                        <div className="flex flex-wrap gap-3 mb-6">
+                          <Select value={selectedDevice || ""} onValueChange={handleDeviceChange}>
+                            <SelectTrigger className="w-[200px]">
+                              <SelectValue placeholder="All devices" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="">All devices</SelectItem>
+                              {mockDevices.map(device => (
+                                <SelectItem key={device.id} value={device.id}>
+                                  {device.name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <Button variant="outline" className="flex justify-between min-w-[200px]">
+                                <span>
+                                  {selectedTopics.length === 0 
+                                    ? "All topics" 
+                                    : `${selectedTopics.length} topics`}
+                                </span>
+                                <ChevronDown className="h-4 w-4 ml-2" />
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-[250px] p-0" align="start">
+                              <div className="p-2 border-b">
+                                <h4 className="font-medium text-sm">Select Topics</h4>
+                                <p className="text-xs text-muted-foreground">
+                                  {availableTopics.length} topics available
+                                </p>
                               </div>
-                            </div>
-                            <div className="p-2 max-h-[200px] overflow-auto">
-                              {availableTopics.length === 0 ? (
-                                <div className="text-center py-2 text-muted-foreground text-sm">
-                                  {selectedDevice 
-                                    ? "No topics available for this device"
-                                    : "Select a device to see topics"}
-                                </div>
-                              ) : (
-                                availableTopics.map(topic => (
-                                  <div key={topic.id} className="flex items-center space-x-2 py-1">
-                                    <Checkbox 
-                                      id={topic.id} 
-                                      checked={selectedTopics.includes(topic.name)}
-                                      onCheckedChange={() => handleTopicToggle(topic.name)}
-                                    />
-                                    <label htmlFor={topic.id} className="text-sm cursor-pointer">
-                                      {topic.name}
-                                    </label>
+                              <div className="p-2 max-h-[200px] overflow-auto">
+                                {availableTopics.length === 0 ? (
+                                  <div className="text-muted-foreground text-center py-4">
+                                    {selectedDevice ? "No topics for this device" : "Select a device to see topics"}
                                   </div>
-                                ))
-                              )}
-                            </div>
-                            <div className="p-2 border-t flex justify-between">
-                              <Button 
-                                variant="ghost" 
-                                size="sm" 
-                                onClick={() => setSelectedTopics([])}
-                              >
-                                Clear
-                              </Button>
-                              <Button 
-                                variant="ghost" 
-                                size="sm" 
-                                onClick={() => setSelectedTopics(availableTopics.map(t => t.name))}
-                              >
-                                Select All
-                              </Button>
-                            </div>
-                          </PopoverContent>
-                        </Popover>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <Label htmlFor="date-range">Date Range</Label>
-                        <Select value={selectedDateRange} onValueChange={setSelectedDateRange}>
-                          <SelectTrigger id="date-range">
-                            <SelectValue placeholder="Select date range" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="today">Today</SelectItem>
-                            <SelectItem value="yesterday">Yesterday</SelectItem>
-                            <SelectItem value="last7days">Last 7 Days</SelectItem>
-                            <SelectItem value="last30days">Last 30 Days</SelectItem>
-                            <SelectItem value="custom">Custom Range</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      
-                      <div className="space-y-2 relative">
-                        <Label htmlFor="search">Search</Label>
-                        <div className="relative">
-                          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                          <Input
-                            id="search"
-                            placeholder="Search in values or devices..." 
-                            className="pl-9"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                          />
-                          {searchQuery && (
+                                ) : (
+                                  availableTopics.map(topic => (
+                                    <div key={topic.id} className="flex items-center space-x-2 py-1.5">
+                                      <Checkbox 
+                                        id={topic.id} 
+                                        checked={selectedTopics.includes(topic.name)}
+                                        onCheckedChange={() => handleTopicToggle(topic.name)}
+                                      />
+                                      <label 
+                                        htmlFor={topic.id} 
+                                        className="text-sm cursor-pointer flex-1 truncate"
+                                      >
+                                        {topic.name}
+                                      </label>
+                                    </div>
+                                  ))
+                                )}
+                              </div>
+                              <div className="border-t p-2 flex justify-between">
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm" 
+                                  onClick={() => setSelectedTopics([])}
+                                >
+                                  Clear
+                                </Button>
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm" 
+                                  onClick={() => setSelectedTopics(availableTopics.map(t => t.name))}
+                                >
+                                  Select All
+                                </Button>
+                              </div>
+                            </PopoverContent>
+                          </Popover>
+
+                          <Button 
+                            variant={showFilters ? "default" : "outline"} 
+                            size="default" 
+                            onClick={() => setShowFilters(!showFilters)}
+                            className={`flex items-center ${showFilters ? 'bg-primary' : ''}`}
+                          >
+                            <SlidersHorizontal className="mr-2 h-4 w-4" />
+                            {showFilters ? "Hide Filters" : "Advanced Filters"}
+                          </Button>
+
+                          {(selectedDevice || selectedTopics.length > 0 || valueMin || valueMax || timeRange.start || timeRange.end) && (
                             <Button 
                               variant="ghost" 
-                              size="sm" 
-                              className="absolute right-1 top-1 h-7 w-7 p-0" 
-                              onClick={() => setSearchQuery("")}
+                              className="border border-dashed"
+                              onClick={clearFilters}
                             >
-                              <X className="h-3 w-3" />
+                              <X className="mr-2 h-4 w-4" />
+                              Clear All Filters
                             </Button>
                           )}
                         </div>
-                      </div>
-                    </div>
-                    
-                    <div className="mt-4">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => setShowFilters(!showFilters)}
-                        className="flex items-center"
-                      >
-                        <SlidersHorizontal className="mr-2 h-4 w-4" />
-                        {showFilters ? "Hide Advanced Filters" : "Show Advanced Filters"}
-                      </Button>
-                    </div>
-                    
-                    {showFilters && (
-                      <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 p-4 border rounded-md">
-                        <div className="space-y-2">
-                          <Label>Value Range</Label>
-                          <div className="flex space-x-2">
-                            <div className="flex-1">
-                              <Input 
-                                type="number" 
-                                placeholder="Min" 
-                                value={valueMin}
-                                onChange={(e) => setValueMin(e.target.value)}
-                              />
-                            </div>
-                            <div className="flex-1">
-                              <Input 
-                                type="number" 
-                                placeholder="Max" 
-                                value={valueMax}
-                                onChange={(e) => setValueMax(e.target.value)}
-                              />
+
+                        {showFilters && (
+                          <div className="mb-6 p-4 border rounded-md bg-muted/10">
+                            <h3 className="text-sm font-medium mb-4">Advanced Filters</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="space-y-2">
+                                <Label>Value Range</Label>
+                                <div className="flex space-x-2">
+                                  <div className="w-full">
+                                    <Input 
+                                      type="number" 
+                                      placeholder="Min" 
+                                      value={valueMin}
+                                      onChange={(e) => setValueMin(e.target.value)}
+                                    />
+                                  </div>
+                                  <div className="w-full">
+                                    <Input 
+                                      type="number" 
+                                      placeholder="Max" 
+                                      value={valueMax}
+                                      onChange={(e) => setValueMax(e.target.value)}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <div className="space-y-2">
+                                <Label>Custom Time Range</Label>
+                                <div className="grid grid-cols-2 gap-2">
+                                  <Input 
+                                    type="datetime-local" 
+                                    value={timeRange.start}
+                                    onChange={(e) => setTimeRange({...timeRange, start: e.target.value})}
+                                    placeholder="From"
+                                  />
+                                  <Input 
+                                    type="datetime-local" 
+                                    value={timeRange.end}
+                                    onChange={(e) => setTimeRange({...timeRange, end: e.target.value})}
+                                    placeholder="To"
+                                  />
+                                </div>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        
-                        <div className="space-y-2">
-                          <Label>Custom Time Range</Label>
-                          <div className="flex space-x-2">
-                            <Input 
-                              type="datetime-local" 
-                              value={timeRange.start}
-                              onChange={(e) => setTimeRange({...timeRange, start: e.target.value})}
-                            />
-                            <span className="flex items-center text-muted-foreground">to</span>
-                            <Input 
-                              type="datetime-local" 
-                              value={timeRange.end}
-                              onChange={(e) => setTimeRange({...timeRange, end: e.target.value})}
-                            />
+                        )}
+
+                        {/* Active filters */}
+                        {(selectedDevice || selectedTopics.length > 0 || valueMin || valueMax || timeRange.start || timeRange.end) && (
+                          <div className="mb-4">
+                            <div className="text-sm text-muted-foreground mb-2">Active Filters:</div>
+                            <div className="flex flex-wrap gap-2">
+                              {selectedDevice && (
+                                <Badge variant="outline" className="px-2 py-1 flex items-center gap-1">
+                                  Device: {mockDevices.find(d => d.id === selectedDevice)?.name}
+                                  <Button 
+                                    size="sm" 
+                                    variant="ghost" 
+                                    onClick={() => setSelectedDevice(null)}
+                                    className="h-4 w-4 p-0 ml-1"
+                                  >
+                                    <X className="h-3 w-3" />
+                                  </Button>
+                                </Badge>
+                              )}
+                              
+                              {selectedTopics.length > 0 && (
+                                <Badge variant="outline" className="px-2 py-1 flex items-center gap-1">
+                                  Topics: {selectedTopics.length}
+                                  <Button 
+                                    size="sm" 
+                                    variant="ghost" 
+                                    onClick={() => setSelectedTopics([])}
+                                    className="h-4 w-4 p-0 ml-1"
+                                  >
+                                    <X className="h-3 w-3" />
+                                  </Button>
+                                </Badge>
+                              )}
+                              
+                              {(valueMin || valueMax) && (
+                                <Badge variant="outline" className="px-2 py-1 flex items-center gap-1">
+                                  Value: {valueMin || '∞'} - {valueMax || '∞'}
+                                  <Button 
+                                    size="sm" 
+                                    variant="ghost" 
+                                    onClick={() => { setValueMin(''); setValueMax(''); }}
+                                    className="h-4 w-4 p-0 ml-1"
+                                  >
+                                    <X className="h-3 w-3" />
+                                  </Button>
+                                </Badge>
+                              )}
+                              
+                              {(timeRange.start || timeRange.end) && (
+                                <Badge variant="outline" className="px-2 py-1 flex items-center gap-1">
+                                  Time: {timeRange.start ? new Date(timeRange.start).toLocaleDateString() : '∞'} - 
+                                  {timeRange.end ? new Date(timeRange.end).toLocaleDateString() : '∞'}
+                                  <Button 
+                                    size="sm" 
+                                    variant="ghost" 
+                                    onClick={() => setTimeRange({ start: '', end: '' })}
+                                    className="h-4 w-4 p-0 ml-1"
+                                  >
+                                    <X className="h-3 w-3" />
+                                  </Button>
+                                </Badge>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                        
-                        <div className="flex items-end">
-                          <Button className="ml-auto" onClick={() => {
-                            toast({
-                              title: "Filters Applied",
-                              description: "Data filtered according to your criteria",
-                            });
-                          }}>
-                            <Filter className="mr-2 h-4 w-4" /> Apply Filters
-                          </Button>
-                        </div>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
+                        )}
 
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex justify-between items-center">
-                      <span>Historical Data</span>
-                      <span className="text-sm font-normal text-muted-foreground">
-                        Showing {filteredData.length} records
-                      </span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <Tabs defaultValue="table">
-                      <TabsList className="mb-4">
-                        <TabsTrigger value="table">
-                          <span className="flex items-center">
-                            <Table className="h-4 w-4 mr-2" />
-                            Table View
-                          </span>
-                        </TabsTrigger>
-                        <TabsTrigger value="chart">
-                          <span className="flex items-center">
-                            <LineChart className="h-4 w-4 mr-2" />
-                            Chart View
-                          </span>
-                        </TabsTrigger>
-                      </TabsList>
+                        <Tabs defaultValue={activeView} onValueChange={setActiveView} className="w-full">
+                          <div className="flex items-center justify-between mb-4">
+                            <TabsList className="w-auto">
+                              <TabsTrigger value="table" className="px-3 py-1.5">
+                                <FileText className="mr-2 h-4 w-4" /> Table
+                              </TabsTrigger>
+                              <TabsTrigger value="card" className="px-3 py-1.5">
+                                <PanelRightClose className="mr-2 h-4 w-4" /> Card
+                              </TabsTrigger>
+                            </TabsList>
+                            
+                            <div className="flex gap-2">
+                              <Button variant="outline" size="sm" onClick={() => toast({ title: "Sharing options", description: "Share configuration opened" })}>
+                                <Share2 className="mr-2 h-4 w-4" />
+                                Share
+                              </Button>
+                              <Button variant="outline" size="sm" onClick={() => window.print()}>
+                                <Printer className="mr-2 h-4 w-4" />
+                                Print
+                              </Button>
+                            </div>
+                          </div>
 
-                      <TabsContent value="table">
-                        <div className="rounded-md border">
-                          <Table>
-                            <TableHeader>
-                              <TableRow>
-                                <TableHead>Timestamp</TableHead>
-                                <TableHead>Device</TableHead>
-                                <TableHead>Topic</TableHead>
-                                <TableHead>Value</TableHead>
-                              </TableRow>
-                            </TableHeader>
-                            <TableBody>
+                          <TabsContent value="table" className="mt-0">
+                            <div className="rounded-md border">
+                              <Table>
+                                <TableHeader>
+                                  <TableRow>
+                                    <TableHead>Timestamp</TableHead>
+                                    <TableHead>Device</TableHead>
+                                    <TableHead>Topic</TableHead>
+                                    <TableHead>Value</TableHead>
+                                  </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                  {filteredData.length === 0 ? (
+                                    <TableRow>
+                                      <TableCell colSpan={4} className="text-center h-24 text-muted-foreground">
+                                        No data available for the selected filters.
+                                      </TableCell>
+                                    </TableRow>
+                                  ) : (
+                                    filteredData.map((item) => {
+                                      const device = mockDevices.find(d => d.id === item.deviceId);
+                                      return (
+                                        <TableRow key={item.id} className="cursor-pointer hover:bg-muted/40">
+                                          <TableCell className="font-mono text-xs">{item.timestamp}</TableCell>
+                                          <TableCell>{device?.name || item.deviceId}</TableCell>
+                                          <TableCell className="font-mono text-xs">{item.topic}</TableCell>
+                                          <TableCell className="font-semibold">{item.value}</TableCell>
+                                        </TableRow>
+                                      );
+                                    })
+                                  )}
+                                </TableBody>
+                              </Table>
+                            </div>
+                            
+                            <div className="flex justify-between mt-4">
+                              <div className="text-sm text-muted-foreground">
+                                Showing {filteredData.length} of {mockData.length} records
+                              </div>
+                              <div className="flex gap-1">
+                                <Button variant="outline" size="sm" disabled>Previous</Button>
+                                <Button variant="outline" size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">1</Button>
+                                <Button variant="outline" size="sm">Next</Button>
+                              </div>
+                            </div>
+                          </TabsContent>
+
+                          <TabsContent value="card" className="mt-0">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               {filteredData.length === 0 ? (
-                                <TableRow>
-                                  <TableCell colSpan={4} className="text-center h-24 text-muted-foreground">
-                                    No data available for the selected filters.
-                                  </TableCell>
-                                </TableRow>
+                                <div className="md:col-span-2 text-center py-12 border rounded-md bg-muted/10">
+                                  <FileText className="mx-auto h-12 w-12 text-muted-foreground opacity-30 mb-2" />
+                                  <p className="text-muted-foreground">No data available for the selected filters.</p>
+                                </div>
                               ) : (
                                 filteredData.map((item) => {
                                   const device = mockDevices.find(d => d.id === item.deviceId);
                                   return (
-                                    <TableRow key={item.id}>
-                                      <TableCell>{item.timestamp}</TableCell>
-                                      <TableCell>{device?.name || item.deviceId}</TableCell>
-                                      <TableCell>{item.topic}</TableCell>
-                                      <TableCell>{item.value}</TableCell>
-                                    </TableRow>
+                                    <Card key={item.id} className="overflow-hidden">
+                                      <CardHeader className="bg-muted/30 pb-2 pt-3">
+                                        <div className="flex justify-between">
+                                          <div>
+                                            <Badge variant="outline">{device?.name || item.deviceId}</Badge>
+                                            <div className="text-xs text-muted-foreground mt-1 font-mono">
+                                              {item.topic}
+                                            </div>
+                                          </div>
+                                          <Badge 
+                                            variant={typeof item.value === 'number' ? "default" : "outline"}
+                                            className={typeof item.value === 'number' ? "bg-blue-500" : ""}
+                                          >
+                                            {typeof item.value === 'number' ? "Numeric" : "String"}
+                                          </Badge>
+                                        </div>
+                                      </CardHeader>
+                                      <CardContent className="p-4">
+                                        <div className="flex justify-between items-center">
+                                          <div className="text-xl font-bold">{item.value}</div>
+                                          <div className="text-muted-foreground text-xs font-mono">
+                                            {new Date(item.timestamp).toLocaleString()}
+                                          </div>
+                                        </div>
+                                      </CardContent>
+                                    </Card>
                                   );
                                 })
                               )}
-                            </TableBody>
-                          </Table>
-                        </div>
-                        
-                        <div className="flex justify-between mt-4">
-                          <div className="text-sm text-muted-foreground">
-                            Page 1 of 1
-                          </div>
-                          <div className="flex gap-1">
-                            <Button variant="outline" size="sm" disabled>Previous</Button>
-                            <Button variant="outline" size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">1</Button>
-                            <Button variant="outline" size="sm">Next</Button>
-                          </div>
-                        </div>
-                      </TabsContent>
+                            </div>
+                          </TabsContent>
+                        </Tabs>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
 
-                      <TabsContent value="chart">
-                        <div className="h-80 flex items-center justify-center border rounded-md p-4">
-                          <div className="text-muted-foreground">
-                            <LineChart className="h-10 w-10 mx-auto mb-2 opacity-50" />
-                            <p className="text-center">
-                              {filteredData.length > 0 ? (
-                                "Chart visualization will be implemented here"
-                              ) : (
-                                "No data available for visualization"
-                              )}
+                  <TabsContent value="visualization">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-lg">Data Visualization</CardTitle>
+                        <CardDescription>
+                          Visual representation of your historical data
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="p-6">
+                        <div className="flex items-center justify-center h-[400px] border rounded-md bg-muted/10">
+                          <div className="text-center p-6">
+                            <BarChart3 className="h-16 w-16 mx-auto text-muted-foreground mb-3 opacity-40" />
+                            <h3 className="text-lg font-medium">Data Visualization</h3>
+                            <p className="text-muted-foreground max-w-md mt-2">
+                              Select data points and visualization type to generate charts and graphs of your IoT data.
                             </p>
+                            <div className="flex gap-3 mt-6 justify-center">
+                              <Button>
+                                <LineChart className="mr-2 h-4 w-4" />
+                                Line Chart
+                              </Button>
+                              <Button variant="outline">
+                                <BarChart className="mr-2 h-4 w-4" />
+                                Bar Chart
+                              </Button>
+                            </div>
                           </div>
                         </div>
-                      </TabsContent>
-                    </Tabs>
-                  </CardContent>
-                </Card>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+
+                  <TabsContent value="analytics">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-lg">Data Analytics</CardTitle>
+                        <CardDescription>
+                          Advanced analytics and insights from your data
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="p-6">
+                        <div className="flex items-center justify-center h-[400px] border rounded-md bg-muted/10">
+                          <div className="text-center p-6">
+                            <LineChart className="h-16 w-16 mx-auto text-muted-foreground mb-3 opacity-40" />
+                            <h3 className="text-lg font-medium">Analytics Engine</h3>
+                            <p className="text-muted-foreground max-w-md mt-2">
+                              Apply advanced analytics to your IoT data to identify patterns, anomalies, and trends.
+                            </p>
+                            <Button className="mt-6">
+                              Generate Analytics
+                            </Button>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+                </Tabs>
               </div>
             </div>
           </div>
