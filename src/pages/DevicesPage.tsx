@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
@@ -11,6 +12,13 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { DeviceForm } from "@/components/devices/DeviceForm";
+import { 
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle 
+} from "@/components/ui/dialog";
 
 export default function DevicesPage() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -43,6 +51,14 @@ Client ID: ${mqttCredentials.clientId}`;
     toast({
       title: "Credentials Downloaded",
       description: "Your MQTT credentials have been downloaded successfully.",
+    });
+  };
+
+  const handleDeviceAdded = () => {
+    setShowAddDevice(false);
+    toast({
+      title: "Device Added",
+      description: "The device has been successfully registered.",
     });
   };
 
@@ -140,20 +156,14 @@ Client ID: ${mqttCredentials.clientId}`;
                   </TabsContent>
                 </Tabs>
                 
-                {showAddDevice && (
-                  <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 animate-fade-in">
-                    <div className="bg-card rounded-lg p-6 shadow-xl min-w-[350px] relative">
-                      <button aria-label="Close" className="absolute right-2 top-2" onClick={() => setShowAddDevice(false)}>
-                        ×
-                      </button>
-                      <h3 className="text-lg font-semibold mb-4">Add Device (Demo Only)</h3>
-                      {/* Place holder for device form -- could link to DeviceForm */}
-                      <div className="text-muted-foreground text-center pb-3">
-                        Device registration goes here (not implemented).
-                      </div>
-                    </div>
-                  </div>
-                )}
+                <Dialog open={showAddDevice} onOpenChange={setShowAddDevice}>
+                  <DialogContent className="sm:max-w-md md:max-w-lg">
+                    <DialogHeader>
+                      <DialogTitle>Add New Device</DialogTitle>
+                    </DialogHeader>
+                    <DeviceForm onSubmit={handleDeviceAdded} />
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
           </div>
