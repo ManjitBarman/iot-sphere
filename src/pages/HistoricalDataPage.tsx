@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
@@ -159,7 +158,7 @@ export default function HistoricalDataPage() {
   };
 
   const handleDeviceChange = (deviceId: string) => {
-    setSelectedDevice(deviceId === "" ? null : deviceId);
+    setSelectedDevice(deviceId === "all" ? null : deviceId);
     // Reset topics when device changes
     setSelectedTopics([]);
   };
@@ -273,12 +272,12 @@ export default function HistoricalDataPage() {
                     <Card>
                       <CardContent className="p-6">
                         <div className="flex flex-wrap gap-3 mb-6">
-                          <Select value={selectedDevice || ""} onValueChange={handleDeviceChange}>
+                          <Select value={selectedDevice || "all"} onValueChange={handleDeviceChange}>
                             <SelectTrigger className="w-[200px]">
                               <SelectValue placeholder="All devices" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="">All devices</SelectItem>
+                              <SelectItem value="all">All devices</SelectItem>
                               {mockDevices.map(device => (
                                 <SelectItem key={device.id} value={device.id}>
                                   {device.name}
