@@ -5,6 +5,7 @@ import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import HomeSteps from "@/components/dashboard/HomeSteps";
 import QuickActions from "@/components/dashboard/QuickActions";
 import GettingStartedGuide from "@/components/dashboard/GettingStartedGuide";
+import HomeTour, { MiniTourCard } from "@/components/dashboard/HomeTour";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -121,32 +122,36 @@ export default function DashboardHome() {
                     </CardContent>
                   </Card>
 
-                  <Card className="col-span-1">
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-lg flex items-center">
-                        <LayoutDashboard className="h-5 w-5 mr-2 text-primary" />
-                        Quick Links
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <Button variant="outline" className="w-full justify-start" onClick={() => navigate("/devices")}>
-                        <Server className="mr-2 h-4 w-4" />
-                        Manage Devices
-                      </Button>
-                      <Button variant="outline" className="w-full justify-start" onClick={() => navigate("/dashboards")}>
-                        <LayoutDashboard className="mr-2 h-4 w-4" />
-                        Customize Dashboards
-                      </Button>
-                      <Button variant="outline" className="w-full justify-start" onClick={() => navigate("/analytics")}>
-                        <BarChart3 className="mr-2 h-4 w-4" />
-                        View Analytics
-                      </Button>
-                      <Button variant="outline" className="w-full justify-start" onClick={() => navigate("/profile")}>
-                        <Database className="mr-2 h-4 w-4" />
-                        MQTT Credentials
-                      </Button>
-                    </CardContent>
-                  </Card>
+                  <div className="space-y-6">
+                    <MiniTourCard onStartTour={() => document.getElementById('start-tour-button')?.click()} />
+                    
+                    <Card>
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-lg flex items-center">
+                          <LayoutDashboard className="h-5 w-5 mr-2 text-primary" />
+                          Quick Links
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <Button variant="outline" className="w-full justify-start" onClick={() => navigate("/devices")}>
+                          <Server className="mr-2 h-4 w-4" />
+                          Manage Devices
+                        </Button>
+                        <Button variant="outline" className="w-full justify-start" onClick={() => navigate("/dashboards")}>
+                          <LayoutDashboard className="mr-2 h-4 w-4" />
+                          Customize Dashboards
+                        </Button>
+                        <Button variant="outline" className="w-full justify-start" onClick={() => navigate("/analytics")}>
+                          <BarChart3 className="mr-2 h-4 w-4" />
+                          View Analytics
+                        </Button>
+                        <Button variant="outline" className="w-full justify-start" onClick={() => navigate("/profile")}>
+                          <Database className="mr-2 h-4 w-4" />
+                          MQTT Credentials
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </div>
                 </div>
 
                 <HomeSteps />
@@ -164,6 +169,16 @@ export default function DashboardHome() {
           </div>
         </div>
       </SidebarProvider>
+      
+      {/* Hidden button that will be clicked programmatically */}
+      <button
+        id="start-tour-button"
+        className="hidden"
+        aria-hidden="true"
+      />
+      
+      {/* Add the tour component */}
+      <HomeTour />
     </div>
   );
 }

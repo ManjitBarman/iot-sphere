@@ -10,6 +10,9 @@ import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 
 const Index = () => {
+  // Reset the tour when user visits the landing page so they can see it again after login
+  localStorage.removeItem('zsee-tour-seen');
+  
   return (
     <div className="min-h-screen">
       <Navbar />
