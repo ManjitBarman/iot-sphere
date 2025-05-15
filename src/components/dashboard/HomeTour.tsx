@@ -18,43 +18,49 @@ import { useToast } from "@/hooks/use-toast";
 const tourSteps = [
   {
     title: "Welcome to zsee IoT Platform",
-    content: "Let's take a quick tour to help you get started with our IoT platform. We'll walk you through the essential steps from device setup to dashboard monitoring.",
+    content: "Let's take a quick tour to help you get started with our IoT platform. We'll guide you through the essential setup process, from device registration to real-time monitoring.",
     image: "onboarding-welcome.svg",
     target: null
   },
   {
-    title: "Step 1: Create a Device",
-    content: "First, navigate to the Devices section where you can register your IoT hardware by clicking 'Add Device'.",
+    title: "Step 1: Navigate to Devices",
+    content: "First, go to the Devices section where you'll manage your IoT hardware. This is where you'll start the device registration process.",
     image: "onboarding-devices.svg",
     target: "/devices"
   },
   {
-    title: "Step 2: Select Connectivity",
-    content: "When adding a device, you'll select your connectivity type (MQTT or HTTP) and enter your device details.",
+    title: "Step 2: Add a New Device",
+    content: "Click the 'Add Device' button to register your IoT hardware. This will open a form for entering your device details.",
+    image: "onboarding-add-device.svg",
+    target: "/devices"
+  },
+  {
+    title: "Step 3: Select Connectivity Type",
+    content: "Choose your device's connectivity method (MQTT or HTTP) and enter the required device details in the popup form.",
     image: "onboarding-connectivity.svg",
     target: null
   },
   {
-    title: "Step 3: Configure Topics",
-    content: "After creating your device, you'll need to configure MQTT topics that define how data flows between your device and the platform.",
+    title: "Step 4: Configure Topics",
+    content: "After creating your device, you'll need to configure MQTT topics within the device settings. These topics define the data channels between your device and the platform.",
     image: "onboarding-topics.svg",
     target: null
   },
   {
-    title: "Step 4: Create Dashboard",
-    content: "Next, create a dashboard where you can visualize and monitor your device data in real-time.",
+    title: "Step 5: Create Dashboard",
+    content: "Next, create a dashboard to visualize and monitor your device data. If one doesn't exist already, the system will help you create one.",
     image: "onboarding-dashboard.svg",
     target: "/dashboards"
   },
   {
-    title: "Step 5: Set Up Simulation",
-    content: "If you have hardware JSON data available, you can paste it into the simulation section to test your setup.",
+    title: "Step 6: Setup Simulation",
+    content: "If you have hardware JSON data available, paste it into the simulation section to test your setup before connecting actual hardware.",
     image: "onboarding-simulation.svg",
     target: null
   },
   {
-    title: "Step 6: Add Widgets",
-    content: "In dashboard edit mode, add widgets to visualize different aspects of your device data. You can choose from various widget types and customize their appearance.",
+    title: "Step 7: Add Widgets",
+    content: "In dashboard edit mode, click 'Add Widget' to visualize different aspects of your device data. You can choose from various widget types and customize their appearance.",
     image: "onboarding-widgets.svg",
     target: null
   },
@@ -86,13 +92,14 @@ const TourCard = ({ step, total, title, content, image, onNext, onBack, onSkip, 
         {/* We'd use actual images in production, but for now using a placeholder */}
         <div className="text-primary/40 text-6xl">
           {step === 0 && <Server className="w-16 h-16" />}
-          {step === 1 && <Plus className="w-16 h-16" />}
-          {step === 2 && <Server className="w-16 h-16" />}
-          {step === 3 && <Database className="w-16 h-16" />}
-          {step === 4 && <LayoutDashboard className="w-16 h-16" />}
-          {step === 5 && <Save className="w-16 h-16" />}
-          {step === 6 && <Gauge className="w-16 h-16" />}
-          {step === 7 && <LayoutDashboard className="w-16 h-16" />}
+          {step === 1 && <Server className="w-16 h-16" />}
+          {step === 2 && <Plus className="w-16 h-16" />}
+          {step === 3 && <Server className="w-16 h-16" />}
+          {step === 4 && <Database className="w-16 h-16" />}
+          {step === 5 && <LayoutDashboard className="w-16 h-16" />}
+          {step === 6 && <Save className="w-16 h-16" />}
+          {step === 7 && <Gauge className="w-16 h-16" />}
+          {step === 8 && <LayoutDashboard className="w-16 h-16" />}
         </div>
       </div>
       
