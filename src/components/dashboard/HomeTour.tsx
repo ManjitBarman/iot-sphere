@@ -10,7 +10,7 @@ import {
   Database, 
   LayoutDashboard, 
   Save, 
-  Widget 
+  Gauge
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -91,7 +91,7 @@ const TourCard = ({ step, total, title, content, image, onNext, onBack, onSkip, 
           {step === 3 && <Database className="w-16 h-16" />}
           {step === 4 && <LayoutDashboard className="w-16 h-16" />}
           {step === 5 && <Save className="w-16 h-16" />}
-          {step === 6 && <Widget className="w-16 h-16" />}
+          {step === 6 && <Gauge className="w-16 h-16" />}
           {step === 7 && <LayoutDashboard className="w-16 h-16" />}
         </div>
       </div>
