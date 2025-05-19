@@ -1,14 +1,7 @@
 
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Check, ChevronDown, Layout } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Popover,
   PopoverContent,
@@ -38,13 +31,19 @@ interface DashboardSwitcherProps {
   currentDashboardId?: string;
 }
 
-const DashboardSwitcher = ({ currentDashboardId = "main" }: DashboardSwitcherProps) => {
+const DashboardSwitcher = ({ currentDashboardId: propDashboardId }: DashboardSwitcherProps) => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { dashboardId } = useParams();
+  
+  // Determine the current dashboard ID from URL params or prop
+  const currentDashboardId = dashboardId || propDashboardId || "main";
   
   const currentDashboard = sampleDashboards.find(
     (dashboard) => dashboard.id === currentDashboardId
+  ) || sampleDashboards.find(
+    (dashboard) => dashboard.path === `/dashboard/${currentDashboardId}`
   ) || sampleDashboards[0];
 
   const handleSelect = (dashboardId: string) => {
@@ -83,12 +82,13 @@ const DashboardSwitcher = ({ currentDashboardId = "main" }: DashboardSwitcherPro
                 <CommandItem
                   key={dashboard.id}
                   value={dashboard.id}
-                  onSelect={handleSelect}
+                  onSelect={() => handleSelect(dashboard.id)}
                   className="cursor-pointer"
                 >
                   <Layout className="mr-2 h-4 w-4" />
                   <span>{dashboard.name}</span>
-                  {dashboard.id === currentDashboardId && (
+                  {(dashboard.id === currentDashboardId || 
+                   dashboard.path === `/dashboard/${currentDashboardId}`) && (
                     <Check className="ml-auto h-4 w-4" />
                   )}
                 </CommandItem>

@@ -1,9 +1,9 @@
-
 import { Moon, Sun, Plus, Maximize2, Minimize2, ToggleLeft, ToggleRight, Undo, Redo } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/useTheme";
 import ProfileMenu from "@/components/ProfileMenu";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import { 
   Breadcrumb,
   BreadcrumbItem,
@@ -26,6 +26,7 @@ const DashboardHeader = ({ editMode, setEditMode }: DashboardHeaderProps) => {
   const [isSimulating, setIsSimulating] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const { toast } = useToast();
+  const { dashboardId } = useParams();
 
   const toggleSimulation = () => {
     const newState = !isSimulating;
@@ -74,7 +75,7 @@ const DashboardHeader = ({ editMode, setEditMode }: DashboardHeaderProps) => {
       <div className="h-16 px-4 flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <h1 className="text-xl font-semibold">zsee IoT Dashboard</h1>
-          <DashboardSwitcher />
+          <DashboardSwitcher currentDashboardId={dashboardId} />
           <Breadcrumb className="hidden md:flex">
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -189,7 +190,6 @@ const DashboardHeader = ({ editMode, setEditMode }: DashboardHeaderProps) => {
         </div>
       </div>
       
-      {/* Simulation banner */}
       {isSimulating && (
         <div className="bg-primary/10 border-t border-b border-primary/20 py-1 px-4 text-center text-sm text-primary font-medium animate-fade-in">
           Simulation Mode Active — You are viewing simulated data
