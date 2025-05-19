@@ -1,3 +1,4 @@
+
 import { Moon, Sun, Plus, Maximize2, Minimize2, ToggleLeft, ToggleRight, Undo, Redo } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/useTheme";
@@ -17,11 +18,11 @@ import { useToast } from "@/hooks/use-toast";
 import DashboardSwitcher from "@/components/dashboard/DashboardSwitcher";
 
 interface DashboardHeaderProps {
-  editMode: boolean;
-  setEditMode: (value: boolean) => void;
+  editMode?: boolean;
+  setEditMode?: (value: boolean) => void;
 }
 
-const DashboardHeader = ({ editMode, setEditMode }: DashboardHeaderProps) => {
+const DashboardHeader = ({ editMode = false, setEditMode }: DashboardHeaderProps) => {
   const { theme, setTheme } = useTheme();
   const [isSimulating, setIsSimulating] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -166,18 +167,22 @@ const DashboardHeader = ({ editMode, setEditMode }: DashboardHeaderProps) => {
             </Tooltip>
           </TooltipProvider>
 
-          <Button
-            variant={editMode ? "default" : "outline"}
-            onClick={() => setEditMode(!editMode)}
-            className="transition-colors"
-          >
-            {editMode ? "Done" : "Edit"}
-          </Button>
+          {setEditMode && (
+            <Button
+              variant={editMode ? "default" : "outline"}
+              onClick={() => setEditMode(!editMode)}
+              className="transition-colors"
+            >
+              {editMode ? "Done" : "Edit"}
+            </Button>
+          )}
+          
           {editMode && (
             <Button variant="outline" className="gap-1">
               <Plus className="h-4 w-4" /> Add Widget
             </Button>
           )}
+          
           <Button
             variant="ghost"
             size="icon"

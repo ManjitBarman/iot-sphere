@@ -23,6 +23,8 @@ import ThemeDocumentation from "./docs/ThemeDocumentation";
 import ComponentColorGuide from "./docs/ComponentColorGuide";
 import ChakraThemeGuide from "./docs/ChakraThemeGuide";
 import ChakraThemeExport from "./pages/ChakraThemeExport";
+import DashboardLayout from "./layouts/DashboardLayout";
+import Navbar from "./components/Navbar";
 
 const queryClient = new QueryClient();
 
@@ -34,23 +36,29 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/dashboard/home" element={<DashboardHome />} />
-            <Route path="/dashboards" element={<DashboardsPage />} />
-            <Route path="/dashboard/:dashboardId" element={<Dashboard />} />
-            <Route path="/devices" element={<DevicesPage />} />
-            <Route path="/devices/:deviceId" element={<DeviceDetailsPage />} />
-            <Route path="/analytics" element={<AnalyticsPage />} />
-            <Route path="/analytics/historical" element={<HistoricalDataPage />} />
-            <Route path="/analytics/reports" element={<ReportsPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/admin" element={<AdminPanel />} />
-            <Route path="/theme-docs" element={<ThemeDocumentation />} />
-            <Route path="/color-guide" element={<ComponentColorGuide />} />
-            <Route path="/chakra-theme" element={<ChakraThemeGuide />} />
-            <Route path="/chakra-theme-export" element={<ChakraThemeExport />} />
+            {/* Regular pages with Navbar */}
+            <Route path="/" element={<><Navbar /><Index /></>} />
+            <Route path="/login" element={<><Navbar /><Login /></>} />
+            <Route path="/email-demo" element={<><Navbar /><EmailServiceDemo /></>} />
+            <Route path="/theme-docs" element={<><Navbar /><ThemeDocumentation /></>} />
+            <Route path="/color-guide" element={<><Navbar /><ComponentColorGuide /></>} />
+            <Route path="/chakra-theme" element={<><Navbar /><ChakraThemeGuide /></>} />
+            <Route path="/chakra-theme-export" element={<><Navbar /><ChakraThemeExport /></>} />
+            
+            {/* Dashboard related pages with Dashboard Layout */}
+            <Route path="/dashboard" element={<DashboardLayout><Dashboard /></DashboardLayout>} />
+            <Route path="/dashboard/home" element={<DashboardLayout><DashboardHome /></DashboardLayout>} />
+            <Route path="/dashboard/:dashboardId" element={<DashboardLayout><Dashboard /></DashboardLayout>} />
+            <Route path="/dashboards" element={<DashboardLayout><DashboardsPage /></DashboardLayout>} />
+            <Route path="/devices" element={<DashboardLayout><DevicesPage /></DashboardLayout>} />
+            <Route path="/devices/:deviceId" element={<DashboardLayout><DeviceDetailsPage /></DashboardLayout>} />
+            <Route path="/analytics" element={<DashboardLayout><AnalyticsPage /></DashboardLayout>} />
+            <Route path="/analytics/historical" element={<DashboardLayout><HistoricalDataPage /></DashboardLayout>} />
+            <Route path="/analytics/reports" element={<DashboardLayout><ReportsPage /></DashboardLayout>} />
+            <Route path="/profile" element={<DashboardLayout><ProfilePage /></DashboardLayout>} />
+            <Route path="/admin" element={<DashboardLayout><AdminPanel /></DashboardLayout>} />
+            
+            {/* 404 page */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
