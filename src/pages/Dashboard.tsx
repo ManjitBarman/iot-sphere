@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import DashboardContent from "@/components/dashboard/DashboardContent";
@@ -14,6 +15,7 @@ import { UserPermissionsDialog } from "@/components/dashboard/UserPermissionsDia
 import { UserGuideDialog } from "@/components/dashboard/UserGuideDialog";
 
 const Dashboard = () => {
+  const { dashboardId } = useParams();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [autoFormat, setAutoFormat] = useState(true);

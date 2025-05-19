@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
+import DashboardSwitcher from "@/components/dashboard/DashboardSwitcher";
 
 interface DashboardHeaderProps {
   editMode: boolean;
@@ -73,6 +74,7 @@ const DashboardHeader = ({ editMode, setEditMode }: DashboardHeaderProps) => {
       <div className="h-16 px-4 flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <h1 className="text-xl font-semibold">zsee IoT Dashboard</h1>
+          <DashboardSwitcher />
           <Breadcrumb className="hidden md:flex">
             <BreadcrumbList>
               <BreadcrumbItem>
