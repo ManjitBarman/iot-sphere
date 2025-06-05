@@ -1,14 +1,23 @@
 
 /**
  * Email Service for zsee IoT Platform
- * Handles all email-related API calls to the backend
+ * Handles all email-related API calls to the backend with professional templates
  */
+
+import { 
+  sendOtpTemplate, 
+  resendOtpTemplate, 
+  securityAlertTemplate, 
+  welcomeTemplate,
+  type EmailTemplateData 
+} from './emailTemplates';
 
 // Types for our email service
 export interface EmailPayload {
   to: string | string[];
   subject: string;
   body: string;
+  html?: string;
   template?: string;
   attachments?: Array<{
     filename: string;
@@ -63,16 +72,103 @@ export const sendEmail = async (payload: EmailPayload): Promise<EmailResponse> =
 };
 
 /**
+ * Send OTP verification email with professional template
+ */
+export const sendOtpEmail = async (
+  email: string, 
+  otpCode: string, 
+  recipientName?: string
+): Promise<EmailResponse> => {
+  const templateData: EmailTemplateData = {
+    recipientName,
+    otpCode,
+    companyName: 'zsee IoT'
+  };
+
+  return sendEmail({
+    to: email,
+    subject: 'zsee IoT - Your Verification Code',
+    body: `Your verification code is: ${otpCode}`, // Fallback text
+    html: sendOtpTemplate(templateData),
+    template: 'otp-verification',
+  });
+};
+
+/**
+ * Send OTP resend email with professional template
+ */
+export const resendOtpEmail = async (
+  email: string, 
+  otpCode: string, 
+  recipientName?: string
+): Promise<EmailResponse> => {
+  const templateData: EmailTemplateData = {
+    recipientName,
+    otpCode,
+    companyName: 'zsee IoT'
+  };
+
+  return sendEmail({
+    to: email,
+    subject: 'zsee IoT - New Verification Code',
+    body: `Your new verification code is: ${otpCode}`, // Fallback text
+    html: resendOtpTemplate(templateData),
+    template: 'otp-resend',
+  });
+};
+
+/**
+ * Send security alert email
+ */
+export const sendSecurityAlertEmail = async (
+  email: string,
+  alertType: string,
+  recipientName?: string,
+  deviceName?: string
+): Promise<EmailResponse> => {
+  const templateData: EmailTemplateData = {
+    recipientName,
+    alertType,
+    deviceName,
+    timestamp: new Date().toLocaleString(),
+    companyName: 'zsee IoT',
+    loginUrl: `${window.location.origin}/login`
+  };
+
+  return sendEmail({
+    to: email,
+    subject: `zsee IoT - Security Alert: ${alertType}`,
+    body: `Security alert: ${alertType} detected on your account.`, // Fallback text
+    html: securityAlertTemplate(templateData),
+    template: 'security-alert',
+  });
+};
+
+/**
+ * Send welcome email after successful verification
+ */
+export const sendWelcomeEmail = async (email: string, name: string): Promise<EmailResponse> => {
+  const templateData: EmailTemplateData = {
+    recipientName: name,
+    companyName: 'zsee IoT',
+    loginUrl: `${window.location.origin}/dashboard`
+  };
+
+  return sendEmail({
+    to: email,
+    subject: 'Welcome to zsee IoT Platform! 🎉',
+    body: `Welcome to zsee IoT, ${name}! Your IoT journey starts now.`,
+    html: welcomeTemplate(templateData),
+    template: 'welcome',
+  });
+};
+
+/**
  * Send a verification email to a user
  */
 export const sendVerificationEmail = async (email: string, verificationToken: string): Promise<EmailResponse> => {
-  // You could use a template ID here if your backend supports templated emails
-  return sendEmail({
-    to: email,
-    subject: 'Verify your zsee IoT account',
-    body: `Please verify your account by clicking this link: ${window.location.origin}/verify?token=${verificationToken}`,
-    template: 'verification',
-  });
+  // Use the OTP template for verification emails
+  return sendOtpEmail(email, verificationToken);
 };
 
 /**
@@ -84,18 +180,6 @@ export const sendPasswordResetEmail = async (email: string, resetToken: string):
     subject: 'Reset your zsee IoT password',
     body: `Reset your password by clicking this link: ${window.location.origin}/reset-password?token=${resetToken}`,
     template: 'password-reset',
-  });
-};
-
-/**
- * Send a welcome email to new users
- */
-export const sendWelcomeEmail = async (email: string, name: string): Promise<EmailResponse> => {
-  return sendEmail({
-    to: email,
-    subject: 'Welcome to zsee IoT Platform',
-    body: `Hello ${name}, welcome to the zsee IoT platform! Get started by exploring our dashboard.`,
-    template: 'welcome',
   });
 };
 

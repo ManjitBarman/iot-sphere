@@ -2,6 +2,9 @@
 import { useState } from 'react';
 import { 
   sendEmail, 
+  sendOtpEmail,
+  resendOtpEmail,
+  sendSecurityAlertEmail,
   sendVerificationEmail, 
   sendPasswordResetEmail, 
   sendWelcomeEmail, 
@@ -17,6 +20,11 @@ export const useEmail = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+
+  const resetState = () => {
+    setError(null);
+    setSuccess(false);
+  };
 
   /**
    * Send a custom email
@@ -34,6 +42,71 @@ export const useEmail = () => {
       }
       
       setSuccess(true);
+      return response;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      setError(errorMessage);
+      return { success: false, error: errorMessage };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /**
+   * Send OTP verification email
+   */
+  const handleSendOtpEmail = async (email: string, otpCode: string, recipientName?: string) => {
+    setLoading(true);
+    resetState();
+    
+    try {
+      const response = await sendOtpEmail(email, otpCode, recipientName);
+      setSuccess(response.success);
+      return response;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      setError(errorMessage);
+      return { success: false, error: errorMessage };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /**
+   * Resend OTP verification email
+   */
+  const handleResendOtpEmail = async (email: string, otpCode: string, recipientName?: string) => {
+    setLoading(true);
+    resetState();
+    
+    try {
+      const response = await resendOtpEmail(email, otpCode, recipientName);
+      setSuccess(response.success);
+      return response;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      setError(errorMessage);
+      return { success: false, error: errorMessage };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /**
+   * Send security alert email
+   */
+  const handleSendSecurityAlert = async (
+    email: string, 
+    alertType: string, 
+    recipientName?: string, 
+    deviceName?: string
+  ) => {
+    setLoading(true);
+    resetState();
+    
+    try {
+      const response = await sendSecurityAlertEmail(email, alertType, recipientName, deviceName);
+      setSuccess(response.success);
       return response;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
@@ -129,13 +202,13 @@ export const useEmail = () => {
     error,
     success,
     sendCustomEmail,
+    sendOtpEmail: handleSendOtpEmail,
+    resendOtpEmail: handleResendOtpEmail,
+    sendSecurityAlert: handleSendSecurityAlert,
     sendVerificationEmail: handleSendVerificationEmail,
     sendPasswordResetEmail: handleSendPasswordResetEmail,
     sendWelcomeEmail: handleSendWelcomeEmail,
     sendNotificationEmail: handleSendNotificationEmail,
-    resetState: () => {
-      setError(null);
-      setSuccess(false);
-    }
+    resetState
   };
 };
