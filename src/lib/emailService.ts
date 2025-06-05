@@ -1,4 +1,3 @@
-
 /**
  * Email Service for zsee IoT Platform
  * Handles all email-related API calls to the backend with professional templates
@@ -35,7 +34,7 @@ export interface EmailResponse {
 }
 
 // Base API URL - replace with your actual backend URL
-const API_BASE_URL = process.env.API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 /**
  * Send an email using the platform's email service
